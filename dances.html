@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monthly Bush Dances | Sydney Bush Dances</title>
+    <link rel="icon" type="image/png" href="assets/logo_white.png">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main>
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>Monthly Bush Dances</h1>
+            <p class="tagline">Grab a friend, jump right in, and make the floor shake!</p>
+        </div>
+
+        <!-- Info & Photos Section -->
+        <section class="content-section">
+            <div class="container grid-2col">
+                <div class="intro-text">
+                    <h2>A Proper Aussie Shindig</h2>
+                    <p>Our regular bush dances are the perfect excuse to dust off your boots and experience a timeless Australian tradition. With a live acoustic band driving the rhythm and an expert caller guiding you through every step, absolutely no experience is needed.</p>
+                    <p>Whether you're bringing the family, looking for a unique night out, or just wanting to mingle with a cracking community, the dance floor is open to everyone. Expect high energy, plenty of laughs, and a guaranteed good time.</p>
+                    <a href="#booking-section" class="btn btn-primary cta-btn">Book Your Tickets</a>
+                </div>
+                <div class="intro-image" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    <img src="https://images.unsplash.com/photo-1533174000243-731307b229eb?auto=format&fit=crop&w=800&q=80" alt="Lively crowd dancing" class="featured-img" style="margin-bottom: 0;">
+                    <img src="https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?auto=format&fit=crop&w=800&q=80" alt="Acoustic live music" class="featured-img" style="margin-bottom: 0;">
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Booking Wizard Section -->
+        <section id="booking-section" class="content-section light-bg">
+            <div class="container">
+                <h2 class="section-title">Grab Your Tickets</h2>
+                
+                <div class="booking-wizard">
+                    <!-- Step 1: Location -->
+                    <div class="step" id="step-location">
+                        <h2>1. Select Location</h2>
+                        <div class="options-grid">
+                            <button class="btn btn-secondary location-btn" data-loc="robertson">Robertson NSW</button>
+                            <button class="btn btn-secondary location-btn" data-loc="lidcombe">Lidcombe NSW</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Date -->
+                    <div class="step hidden" id="step-date">
+                        <h2>2. Select Date</h2>
+                        <div class="options-grid" id="date-options">
+                            <!-- Buttons injected via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Details & Pay -->
+                    <div class="step hidden" id="step-details">
+                        <h2>3. Gig Details</h2>
+                        <div class="gig-card" id="gig-details-card">
+                            <!-- Details injected via JS -->
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </section>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="main.js"></script>
+</body>
+</html>

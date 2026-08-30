@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | Sydney Bush Dances</title>
+    <link rel="icon" type="image/png" href="assets/logo_white.png">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main>
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>Get in Touch</h1>
+            <p class="tagline">Have a question or want to book us for an event? We'd love to hear from you.</p>
+        </div>
+
+        <section class="content-section">
+            <div class="container contact-grid">
+                
+                <!-- Contact Info & Dynamic FAQs -->
+                <div class="contact-info-col">
+                    <div class="contact-details">
+                        <h2>Contact Details</h2>
+                        <p><strong>Email:</strong> <br><a href="mailto:sydneybushdances@outlook.com">sydneybushdances@outlook.com</a></p>
+                        <p><strong>Phone:</strong> <br><a href="tel:0416530971">0416 530 971</a></p>
+                        <p><strong>Socials:</strong> <br><a href="https://instagram.com" target="_blank" rel="noopener">@sydneybushdances</a></p>
+                    </div>
+
+                    <div class="faq-section">
+                        <h2>Frequently Asked Questions</h2>
+                        <div class="faq-item">
+                            <button class="faq-question">Do I need to bring a partner?</button>
+                            <div class="faq-answer">
+                                <p>Not at all! Bush dancing is highly social and inclusive. You'll switch partners throughout the night, making it a great way to meet new people.</p>
+                            </div>
+                        </div>
+                        <div class="faq-item">
+                            <button class="faq-question">What should I wear?</button>
+                            <div class="faq-answer">
+                                <p>Comfortable clothing and flat, enclosed shoes are best. You'll be moving around a lot, so dress for a bit of a workout!</p>
+                            </div>
+                        </div>
+                        <div class="faq-item">
+                            <button class="faq-question">Do you travel for school workshops?</button>
+                            <div class="faq-answer">
+                                <p>We sure do. We travel across Sydney and surrounding areas to bring the bush dance experience directly to your school hall.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div class="contact-form-col">
+                    <div class="form-card">
+                        <h2>Send us a Message</h2>
+                        <form action="#" method="POST" class="contact-form">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" id="name" name="name" required placeholder="Your full name">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" required placeholder="Your email address">
+                            </div>
+                            <div class="form-group">
+                                <label for="subject">Subject</label>
+                                <select id="subject" name="subject">
+                                    <option value="general">General Enquiry</option>
+                                    <option value="school">School Workshop Booking</option>
+                                    <option value="private">Private Event / Wedding</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Message</label>
+                                <textarea id="message" name="message" rows="5" required placeholder="How can we help you?"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="main.js"></script>
+</body>
+</html>
