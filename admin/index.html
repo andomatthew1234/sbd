@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sydney Bush Dances Admin</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <main class="admin-shell">
+        <header class="admin-header">
+            <div>
+                <p class="eyebrow">Sydney Bush Dances</p>
+                <h1>Event Manager</h1>
+            </div>
+            <button id="sign-out" class="button button-secondary" type="button" hidden>Sign out</button>
+        </header>
+
+        <section id="login-panel" class="panel login-panel">
+            <h2>Sign in</h2>
+            <p>Use the site manager account to manage upcoming dances.</p>
+            <form id="login-form">
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" autocomplete="username" required>
+                <label for="password">Password</label>
+                <input id="password" name="password" type="password" autocomplete="current-password" required>
+                <p id="login-error" class="form-message error" role="alert" hidden></p>
+                <button class="button" type="submit">Sign in</button>
+            </form>
+        </section>
+
+        <section id="manager-panel" hidden>
+            <div class="manager-layout">
+                <section class="panel">
+                    <div class="panel-title">
+                        <h2 id="form-title">Add event</h2>
+                        <button id="new-event" class="text-button" type="button">New event</button>
+                    </div>
+                    <form id="event-form">
+                        <input id="event-id" type="hidden">
+                        <div class="form-grid">
+                            <div>
+                                <label for="location">Location</label>
+                                <input id="location" type="text" placeholder="Robertson NSW" required>
+                            </div>
+                            <div>
+                                <label for="date-label">Display date</label>
+                                <input id="date-label" type="text" placeholder="Friday, 28 November 2026" required>
+                            </div>
+                            <div>
+                                <label for="starts-at">Start date and time</label>
+                                <input id="starts-at" type="datetime-local" required>
+                            </div>
+                            <div>
+                                <label for="status">Status</label>
+                                <select id="status" required>
+                                    <option value="draft">Draft</option>
+                                    <option value="published">Published</option>
+                                    <option value="archived">Archived</option>
+                                </select>
+                            </div>
+                        </div>
+                        <label for="venue-name">Venue name</label>
+                        <input id="venue-name" type="text" required>
+                        <label for="address">Street address</label>
+                        <input id="address" type="text" required>
+                        <label for="ticket-summary">Ticket summary</label>
+                        <input id="ticket-summary" type="text" placeholder="$20 online / $25 at the door / $80 per family" required>
+                        <label for="square-url">Square checkout URL</label>
+                        <input id="square-url" type="url" placeholder="https://square.link/u/..." required>
+                        <p id="event-error" class="form-message error" role="alert" hidden></p>
+                        <p id="event-success" class="form-message success" role="status" hidden></p>
+                        <div class="form-actions">
+                            <button class="button" type="submit">Save event</button>
+                            <button id="delete-event" class="button button-danger" type="button" hidden>Delete event</button>
+                        </div>
+                    </form>
+                </section>
+                <section class="panel">
+                    <h2>All events</h2>
+                    <div id="event-list" class="event-list" aria-live="polite">
+                        <p>Loading events...</p>
+                    </div>
+                </section>
+            </div>
+        </section>
+    </main>
+    <script type="module" src="admin.js"></script>
+</body>
+</html>

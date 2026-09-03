@@ -1,0 +1,46 @@
+:root {
+    --green: #173f2b;
+    --gold: #d4a359;
+    --cream: #f7f5ef;
+    --ink: #27352e;
+    --muted: #5f6c64;
+    --line: #dce2db;
+    --danger: #9b2c2c;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--cream); color: var(--ink); font-family: Arial, sans-serif; }
+.admin-shell { width: min(1180px, calc(100% - 2rem)); margin: 0 auto; padding: 3rem 0 5rem; }
+.admin-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 2rem; }
+.eyebrow { margin: 0 0 .35rem; color: var(--green); font-size: .78rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+h1, h2 { color: var(--green); margin-top: 0; }
+h1 { margin-bottom: 0; }
+.panel { padding: 2rem; background: #fff; border-radius: 10px; box-shadow: 0 8px 24px rgb(0 0 0 / 8%); }
+.login-panel { width: min(460px, 100%); margin: 5rem auto; }
+.manager-layout { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(280px, 1fr); gap: 2rem; }
+.panel-title, .form-actions { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+form { display: grid; gap: .7rem; }
+label { margin-top: .5rem; font-weight: 700; font-size: .92rem; }
+input, select { width: 100%; border: 1px solid var(--line); border-radius: 5px; padding: .75rem; font: inherit; color: var(--ink); }
+input:focus, select:focus { outline: 3px solid rgb(212 163 89 / 35%); border-color: var(--gold); }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 1rem; }
+.button { border: 0; border-radius: 5px; padding: .8rem 1rem; background: var(--green); color: white; font: inherit; font-weight: 700; cursor: pointer; }
+.button:hover { background: #0e2c1e; }
+.button-secondary { background: transparent; color: var(--green); border: 1px solid var(--green); }
+.button-danger { background: var(--danger); }
+.text-button { background: none; border: 0; color: var(--green); font: inherit; font-weight: 700; cursor: pointer; text-decoration: underline; }
+.form-message { margin: .5rem 0 0; font-size: .9rem; }
+.error { color: var(--danger); }
+.success { color: #207044; }
+.event-list { display: grid; gap: .75rem; }
+.event-item { width: 100%; padding: 1rem; background: #f7f9f7; border: 1px solid var(--line); border-radius: 6px; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.event-item:hover, .event-item:focus-visible { border-color: var(--gold); outline: 2px solid var(--gold); outline-offset: 2px; }
+.event-item strong, .event-item span { display: block; }
+.event-item span { margin-top: .3rem; color: var(--muted); font-size: .9rem; }
+.status { display: inline-block; margin-top: .55rem; padding: .2rem .45rem; border-radius: 999px; background: #e4ede5; color: var(--green); font-size: .75rem; font-weight: 700; text-transform: capitalize; }
+
+@media (max-width: 760px) {
+    .admin-shell { padding-top: 1.5rem; }
+    .manager-layout, .form-grid { grid-template-columns: 1fr; }
+    .panel { padding: 1.25rem; }
+}

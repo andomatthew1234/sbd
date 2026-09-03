@@ -1,0 +1,15 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSiteManager() {
+      return request.auth != null
+        && request.auth.token.email == 'caleb-sbd@sydney-bush-dances.firebaseapp.com';
+    }
+
+    match /events/{eventId} {
+      allow read: if isSiteManager() || resource.data.status == 'published';
+      allow create, update, delete: if isSiteManager();
+    }
+  }
+}

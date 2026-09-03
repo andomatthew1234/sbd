@@ -33,38 +33,14 @@
             </div>
         </section>
 
-        <!-- Interactive Booking Wizard Section -->
+        <!-- Monthly dance tickets -->
         <section id="booking-section" class="content-section light-bg">
             <div class="container">
                 <h2 class="section-title">Grab Your Tickets</h2>
-                
-                <div class="booking-wizard">
-                    <!-- Step 1: Location -->
-                    <div class="step" id="step-location">
-                        <h2>1. Select Location</h2>
-                        <div class="options-grid">
-                            <button class="btn btn-secondary location-btn" data-loc="robertson">Robertson NSW</button>
-                            <button class="btn btn-secondary location-btn" data-loc="lidcombe">Lidcombe NSW</button>
-                        </div>
-                    </div>
 
-                    <!-- Step 2: Date -->
-                    <div class="step hidden" id="step-date">
-                        <h2>2. Select Date</h2>
-                        <div class="options-grid" id="date-options">
-                            <!-- Buttons injected via JS -->
-                        </div>
-                    </div>
-
-                    <!-- Step 3: Details & Pay -->
-                    <div class="step hidden" id="step-details">
-                        <h2>3. Gig Details</h2>
-                        <div class="gig-card" id="gig-details-card">
-                            <!-- Details injected via JS -->
-                        </div>
-                    </div>
+                <div class="gigs-grid" id="events-list" aria-live="polite">
+                    <p class="events-message">Loading upcoming dances...</p>
                 </div>
-                
             </div>
         </section>
     </main>
@@ -72,5 +48,6 @@
     <div id="footer-placeholder"></div>
 
     <script src="main.js"></script>
+    <script type="module" src="events.js"></script>
 </body>
 </html>
