@@ -33,5 +33,6 @@ service cloud.firestore {
         && request.resource.data.submittedAt == request.time;
       allow read, update, delete: if isSiteManager();
     }
+
   }
 }

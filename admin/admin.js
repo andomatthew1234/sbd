@@ -149,8 +149,8 @@ function showAdminPanel(panel) {
     submissionsPanel.hidden = showEvents;
     eventsTab.classList.toggle("active", showEvents);
     submissionsTab.classList.toggle("active", !showEvents);
-    eventsTab.setAttribute("aria-selected", String(showEvents));
-    submissionsTab.setAttribute("aria-selected", String(!showEvents));
+    eventsTab.setAttribute("aria-current", showEvents ? "page" : "false");
+    submissionsTab.setAttribute("aria-current", showEvents ? "false" : "page");
 }
 
 function renderSubmissions() {

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sydney Bush Dances Admin</title>
-    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="admin.css?v=20260904-2">
 </head>
 <body>
     <main class="admin-shell">
@@ -30,13 +30,23 @@
         </section>
 
         <section id="manager-panel" hidden>
-            <div class="admin-tabs" role="tablist" aria-label="Site management">
-                <button id="events-tab" class="admin-tab active" type="button" role="tab" aria-selected="true" aria-controls="events-panel">Events</button>
-                <button id="submissions-tab" class="admin-tab" type="button" role="tab" aria-selected="false" aria-controls="submissions-panel">Contact submissions <span id="new-submissions-count" hidden></span></button>
-            </div>
-            <div id="events-panel" role="tabpanel" aria-labelledby="events-tab">
-                <div class="manager-layout">
-                <section class="panel">
+            <div class="dashboard-layout">
+                <nav class="dashboard-sidebar" aria-label="Site management">
+                    <p class="sidebar-label">Manage</p>
+                    <button id="events-tab" class="sidebar-item active" type="button" aria-current="page" aria-controls="events-panel">
+                        <svg class="sidebar-icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M7 3v4M17 3v4M3 10h18"></path></svg>
+                        <span>Events</span>
+                    </button>
+                    <button id="submissions-tab" class="sidebar-item" type="button" aria-current="false" aria-controls="submissions-panel">
+                        <svg class="sidebar-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                        <span>Contact form submissions</span>
+                        <span id="new-submissions-count" class="sidebar-badge" hidden></span>
+                    </button>
+                </nav>
+                <div class="dashboard-content">
+                    <div id="events-panel" aria-labelledby="events-tab">
+                        <div class="manager-layout">
+                            <section class="panel">
                     <div class="panel-title">
                         <h2 id="form-title">Add event</h2>
                         <button id="new-event" class="text-button" type="button">New event</button>
@@ -99,17 +109,17 @@
                         </div>
                     </form>
                 </section>
-                <section class="panel">
-                    <h2>All events</h2>
-                    <div id="event-list" class="event-list" aria-live="polite">
-                        <p>Loading events...</p>
+                            <section class="panel">
+                                <h2>All events</h2>
+                                <div id="event-list" class="event-list" aria-live="polite">
+                                    <p>Loading events...</p>
+                                </div>
+                            </section>
+                        </div>
                     </div>
-                </section>
-                </div>
-            </div>
-            <div id="submissions-panel" role="tabpanel" aria-labelledby="submissions-tab" hidden>
-                <div class="submissions-layout">
-                    <section class="panel">
+                    <div id="submissions-panel" aria-labelledby="submissions-tab" hidden>
+                        <div class="submissions-layout">
+                            <section class="panel">
                         <div class="panel-title">
                             <h2>Contact submissions</h2>
                             <label class="filter-label" for="submission-filter">Show
@@ -125,13 +135,15 @@
                             <p>Loading submissions...</p>
                         </div>
                     </section>
-                    <section class="panel submission-detail" id="submission-detail" aria-live="polite">
-                        <p>Select a submission to view it.</p>
-                    </section>
+                            <section class="panel submission-detail" id="submission-detail" aria-live="polite">
+                                <p>Select a submission to view it.</p>
+                            </section>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
     </main>
-    <script type="module" src="admin.js"></script>
+    <script type="module" src="admin.js?v=20260904-2"></script>
 </body>
 </html>

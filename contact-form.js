@@ -40,6 +40,7 @@ if (form) {
         try {
             await addDoc(collection(db, "contactSubmissions"), submission);
             form.reset();
+            document.dispatchEvent(new CustomEvent("sbd:conversion", { detail: "contact_form_submit" }));
             showStatus("Thanks for getting in touch. We will respond as soon as we can.", "success");
         } catch (error) {
             console.error("Unable to submit contact form:", error);

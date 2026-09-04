@@ -1,6 +1,40 @@
 {
   "rules": {
     ".read": false,
-    ".write": false
+    ".write": false,
+    "presence": {
+      "$uid": {
+        ".read": "auth != null && auth.token.email === 'caleb-sbd@sydney-bush-dances.firebaseapp.com'",
+        ".write": "auth != null && auth.uid === $uid",
+        "page": {
+          ".validate": "newData.isString() && newData.val().length <= 80"
+        },
+        "action": {
+          ".validate": "newData.isString() && newData.val().length <= 80"
+        },
+        "lastSeen": {
+          ".validate": "newData.val() === now"
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    },
+    "analytics": {
+      "allTime": {
+        "pages": {
+          "$page": {
+            ".read": "auth != null && auth.token.email === 'caleb-sbd@sydney-bush-dances.firebaseapp.com'",
+            ".write": "auth != null && newData.isNumber() && newData.val() === (data.exists() ? data.val() + 1 : 1)"
+          }
+        },
+        "actions": {
+          "$action": {
+            ".read": "auth != null && auth.token.email === 'caleb-sbd@sydney-bush-dances.firebaseapp.com'",
+            ".write": "auth != null && newData.isNumber() && newData.val() === (data.exists() ? data.val() + 1 : 1)"
+          }
+        }
+      }
+    }
   }
 }
