@@ -35,6 +35,10 @@ h1 { margin-bottom: 0; }
 .analytics-item:last-child { border-bottom: 0; }
 .analytics-item strong { font-size: .92rem; }
 .analytics-item span { color: var(--muted); font-size: .85rem; text-align: right; }
+.mailing-list-heading { background: #fff; border-radius: 10px; box-shadow: 0 8px 24px rgb(0 0 0 / 8%); max-width: 720px; padding: 2.5rem; }
+.mailing-list-heading h2 { font-size: 2.25rem; margin-bottom: .75rem; }
+.mailing-list-heading > p:last-of-type { color: var(--muted); line-height: 1.6; margin: 0 0 1.5rem; }
+.brevo-button { display: inline-block; text-decoration: none; }
 .dashboard-sidebar { background: var(--green); border-radius: 10px; box-shadow: 0 8px 24px rgb(0 0 0 / 8%); padding: 1rem .75rem; position: sticky; top: 1rem; }
 .sidebar-label { color: #bfd0c4; font-size: .72rem; font-weight: 700; letter-spacing: .12em; margin: .5rem .75rem .75rem; text-transform: uppercase; }
 .sidebar-item { align-items: center; background: transparent; border: 0; border-radius: 6px; color: #ecf3ee; cursor: pointer; display: flex; font: inherit; font-size: .92rem; font-weight: 700; gap: .75rem; padding: .8rem .75rem; text-align: left; width: 100%; }

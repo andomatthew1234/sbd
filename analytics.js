@@ -1,15 +1,13 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
-import { getDatabase, onDisconnect, ref, runTransaction, serverTimestamp, set, update } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
+import { addDoc, collection, getFirestore, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 import { firebaseConfig } from "./firebase-config.js";
 
 const app = initializeApp(firebaseConfig, "public-analytics");
-const auth = getAuth(app);
-const db = getDatabase(app);
+const db = getFirestore(app);
 const page = window.location.pathname.split("/").pop() || "index.html";
-let presenceRef;
+const sessionId = getSessionId();
 
-startAnalytics();
+trackPageView();
 
 document.addEventListener("click", event => {
     const link = event.target.closest("a");
@@ -24,43 +22,30 @@ document.addEventListener("sbd:conversion", event => {
 });
 
 export function trackAction(action) {
-    if (!presenceRef) return;
-    update(presenceRef, { action, lastSeen: serverTimestamp() });
     const key = `sbd-action-${action}`;
     if (sessionStorage.getItem(key)) return;
     sessionStorage.setItem(key, "1");
-    increment(`analytics/allTime/actions/${action}`);
-}
-
-async function startAnalytics() {
-    try {
-        const credential = await signInAnonymously(auth);
-        presenceRef = ref(db, `presence/${credential.user.uid}`);
-        startPresence();
-        trackPageView();
-    } catch (error) {
-        // Analytics is optional: an unavailable service must never affect the public site.
-        console.info("Anonymous analytics is unavailable.", error.code);
-    }
-}
-
-function startPresence() {
-    set(presenceRef, { page, action: "viewing_page", lastSeen: serverTimestamp() });
-    onDisconnect(presenceRef).remove();
-
-    // A light heartbeat makes stale mobile connections disappear without constant writes.
-    window.setInterval(() => {
-        update(presenceRef, { lastSeen: serverTimestamp() });
-    }, 120000);
+    record("action", action);
 }
 
 function trackPageView() {
     const key = `sbd-page-${page}`;
     if (sessionStorage.getItem(key)) return;
     sessionStorage.setItem(key, "1");
-    increment(`analytics/allTime/pages/${page}`);
+    record("page_view", "viewing_page");
 }
 
-function increment(path) {
-    runTransaction(ref(db, path), currentValue => (currentValue || 0) + 1);
+function record(type, action) {
+    addDoc(collection(db, "analyticsEvents"), { type, page, action, sessionId, recordedAt: serverTimestamp() })
+        .catch(error => console.info("Analytics could not be recorded.", error.code));
+}
+
+function getSessionId() {
+    const key = "sbd-analytics-session";
+    let id = sessionStorage.getItem(key);
+    if (!id) {
+        id = crypto.randomUUID();
+        sessionStorage.setItem(key, id);
+    }
+    return id;
 }

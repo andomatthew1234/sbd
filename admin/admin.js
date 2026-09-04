@@ -1,7 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 import { addDoc, collection, deleteDoc, doc, getFirestore, onSnapshot, orderBy, query, serverTimestamp, updateDoc } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
-import { getDatabase, onValue, ref } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyCMRd-sHY6cdYdhxTiSydFYnNtNiwpntXo",
@@ -9,14 +8,12 @@ const firebaseConfig = {
     projectId: "sydney-bush-dances",
     storageBucket: "sydney-bush-dances.firebasestorage.app",
     messagingSenderId: "88990952307",
-    appId: "1:88990952307:web:ec772751a9f939ccb5f306",
-    databaseURL: "https://sydney-bush-dances-default-rtdb.firebaseio.com"
+    appId: "1:88990952307:web:ec772751a9f939ccb5f306"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-const realtimeDb = getDatabase(app);
 const loginPanel = document.getElementById("login-panel");
 const managerPanel = document.getElementById("manager-panel");
 const loginForm = document.getElementById("login-form");
@@ -25,9 +22,11 @@ const eventList = document.getElementById("event-list");
 const signOutButton = document.getElementById("sign-out");
 const deleteButton = document.getElementById("delete-event");
 const analyticsTab = document.getElementById("analytics-tab");
+const mailingListTab = document.getElementById("mailing-list-tab");
 const eventsTab = document.getElementById("events-tab");
 const submissionsTab = document.getElementById("submissions-tab");
 const analyticsPanel = document.getElementById("analytics-panel");
+const mailingListPanel = document.getElementById("mailing-list-panel");
 const eventsPanel = document.getElementById("events-panel");
 const submissionsPanel = document.getElementById("submissions-panel");
 const submissionsList = document.getElementById("submissions-list");
@@ -39,9 +38,7 @@ let submissions = [];
 let selectedSubmissionId = "";
 let stopListening;
 let stopSubmissionListener;
-let stopPresenceListener;
-let stopPageViewListener;
-let stopConversionListener;
+let stopAnalyticsListener;
 
 onAuthStateChanged(auth, user => {
     const isManager = user?.email === "caleb-sbd@sydney-bush-dances.firebaseapp.com";
@@ -51,9 +48,7 @@ onAuthStateChanged(auth, user => {
 
     if (stopListening) stopListening();
     if (stopSubmissionListener) stopSubmissionListener();
-    if (stopPresenceListener) stopPresenceListener();
-    if (stopPageViewListener) stopPageViewListener();
-    if (stopConversionListener) stopConversionListener();
+    if (stopAnalyticsListener) stopAnalyticsListener();
     if (isManager) {
         startEventsListener();
         startSubmissionListener();
@@ -75,6 +70,7 @@ loginForm.addEventListener("submit", async event => {
 signOutButton.addEventListener("click", () => signOut(auth));
 document.getElementById("new-event").addEventListener("click", resetForm);
 analyticsTab.addEventListener("click", () => showAdminPanel("analytics"));
+mailingListTab.addEventListener("click", () => showAdminPanel("mailing-list"));
 eventsTab.addEventListener("click", () => showAdminPanel("events"));
 submissionsTab.addEventListener("click", () => showAdminPanel("submissions"));
 submissionFilter.addEventListener("change", renderSubmissions);
@@ -136,7 +132,14 @@ function startSubmissionListener() {
 function renderEvents() {
     eventList.replaceChildren();
     if (!events.length) {
-        eventList.textContent = "No events yet. Add the first event using the form.";
+        const message = document.createElement("p");
+        message.textContent = "No events yet.";
+        const recovery = document.createElement("button");
+        recovery.className = "button";
+        recovery.type = "button";
+        recovery.textContent = "Restore the two deleted events";
+        recovery.addEventListener("click", restoreDeletedEvents);
+        eventList.append(message, recovery);
         return;
     }
     events.forEach(event => {
@@ -156,10 +159,69 @@ function renderEvents() {
     });
 }
 
+async function restoreDeletedEvents() {
+    const recoveryButton = eventList.querySelector("button");
+    if (recoveryButton) {
+        recoveryButton.disabled = true;
+        recoveryButton.textContent = "Restoring events...";
+    }
+
+    const recoveredEvents = [
+        {
+            location: "Lidcombe",
+            dateLabel: "4 November 2026",
+            startsAt: "2026-11-04T18:00",
+            endsAt: "22:00",
+            status: "published",
+            venueName: "Lidcombe Parish Hall",
+            address: "57 Church St, Lidcombe NSW 2141",
+            ticketSummary: "Ticket details coming soon",
+            availability: "available",
+            squareUrl: "",
+            familyTicket: "",
+            accessibility: "",
+            transport: "",
+            refundPolicy: ""
+        },
+        {
+            location: "Robertson",
+            dateLabel: "28 November 2026",
+            startsAt: "2026-11-28T18:00",
+            endsAt: "22:00",
+            status: "published",
+            venueName: "Robertson",
+            address: "55 Hoddle St, Robertson NSW 2577",
+            ticketSummary: "Ticket details coming soon",
+            availability: "available",
+            squareUrl: "",
+            familyTicket: "",
+            accessibility: "",
+            transport: "",
+            refundPolicy: ""
+        }
+    ];
+
+    try {
+        await Promise.all(recoveredEvents.map(event => addDoc(collection(db, "events"), {
+            ...event,
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp()
+        })));
+        showEventMessage("The two deleted events have been restored. Add the verified Square links before selling tickets.", "success");
+    } catch (error) {
+        console.error("Unable to restore events:", error);
+        showEventMessage("The events could not be restored. Please try again.", "error");
+        if (recoveryButton) {
+            recoveryButton.disabled = false;
+            recoveryButton.textContent = "Restore the two deleted events";
+        }
+    }
+}
+
 function showAdminPanel(panel) {
-    const activePanels = { analytics: analyticsPanel, events: eventsPanel, submissions: submissionsPanel };
+    const activePanels = { analytics: analyticsPanel, "mailing-list": mailingListPanel, events: eventsPanel, submissions: submissionsPanel };
     Object.entries(activePanels).forEach(([name, element]) => { element.hidden = name !== panel; });
-    [analyticsTab, eventsTab, submissionsTab].forEach(tab => {
+    [analyticsTab, mailingListTab, eventsTab, submissionsTab].forEach(tab => {
         const isActive = tab.id === `${panel}-tab`;
         tab.classList.toggle("active", isActive);
         tab.setAttribute("aria-current", isActive ? "page" : "false");
@@ -167,33 +229,41 @@ function showAdminPanel(panel) {
 }
 
 function startAnalyticsListeners() {
-    stopPresenceListener = onValue(ref(realtimeDb, "presence"), snapshot => {
-        const visitors = Object.values(snapshot.val() || {}).filter(visitor => visitor.lastSeen >= Date.now() - 300000);
-        renderLiveVisitors(visitors);
+    stopAnalyticsListener = onSnapshot(query(collection(db, "analyticsEvents"), orderBy("recordedAt", "desc")), snapshot => {
+        const analyticsEvents = snapshot.docs.map(item => item.data());
+        renderAnalytics(analyticsEvents);
     }, error => {
-        console.error("Unable to load live visitors:", error);
-        document.getElementById("live-visitor-note").textContent = "Live analytics is unavailable until Realtime Database is enabled.";
-        document.getElementById("live-visitors-list").textContent = "Live analytics is currently unavailable.";
+        console.error("Unable to load analytics:", error);
+        document.getElementById("live-visitor-note").textContent = "Analytics could not be loaded.";
+        document.getElementById("live-visitors-list").textContent = "Analytics could not be loaded.";
     });
+}
 
-    stopPageViewListener = onValue(ref(realtimeDb, "analytics/allTime/pages"), snapshot => {
-        renderAnalyticsTotals(snapshot.val() || {}, "page-views-list", "all-time-page-views", "No page views have been recorded yet.");
+function renderAnalytics(analyticsEvents) {
+    const cutoff = Date.now() - 300000;
+    const recentVisitors = new Map();
+    const pages = {};
+    const actions = {};
+    analyticsEvents.forEach(event => {
+        if (event.type === "page_view") pages[event.page] = (pages[event.page] || 0) + 1;
+        if (event.type === "action") actions[event.action] = (actions[event.action] || 0) + 1;
+        if (event.recordedAt?.toMillis?.() >= cutoff && !recentVisitors.has(event.sessionId)) recentVisitors.set(event.sessionId, event);
     });
-    stopConversionListener = onValue(ref(realtimeDb, "analytics/allTime/actions"), snapshot => {
-        renderAnalyticsTotals(snapshot.val() || {}, "conversions-list", "all-time-conversions", "No conversions have been recorded yet.");
-    });
+    renderLiveVisitors([...recentVisitors.values()]);
+    renderAnalyticsTotals(pages, "page-views-list", "all-time-page-views", "No page views have been recorded yet.");
+    renderAnalyticsTotals(actions, "conversions-list", "all-time-conversions", "No conversions have been recorded yet.");
 }
 
 function renderLiveVisitors(visitors) {
     document.getElementById("live-visitor-count").textContent = visitors.length;
-    document.getElementById("live-visitor-note").textContent = visitors.length ? "Active in the last five minutes." : "Waiting for live activity.";
+    document.getElementById("live-visitor-note").textContent = visitors.length ? "Active in the last five minutes." : "No recent activity.";
     const list = document.getElementById("live-visitors-list");
     list.replaceChildren();
     if (!visitors.length) {
-        list.textContent = "Waiting for live activity.";
+        list.textContent = "No recent activity.";
         return;
     }
-    visitors.sort((a, b) => b.lastSeen - a.lastSeen).forEach(visitor => {
+    visitors.sort((a, b) => b.recordedAt.toMillis() - a.recordedAt.toMillis()).forEach(visitor => {
         const item = document.createElement("div");
         item.className = "analytics-item";
         const page = document.createElement("strong");

@@ -766,6 +766,8 @@ h1, h2 { line-height: 1.08; }
     margin-bottom: 0;
 }
 
+.ticket-link-pending { color: var(--accent-green) !important; font-weight: 700; margin: 1.5rem 0 0 !important; text-align: center; }
+
 /* School compliance downloads */
 .compliance-section { background: var(--primary-dark-green); color: var(--text-light); }
 .compliance-layout { display: grid; gap: 4rem; grid-template-columns: minmax(240px, .7fr) minmax(0, 1.3fr); align-items: start; }

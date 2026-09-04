@@ -34,5 +34,23 @@ service cloud.firestore {
       allow read, update, delete: if isSiteManager();
     }
 
+    match /analyticsEvents/{eventId} {
+      allow create: if request.resource.data.keys().hasOnly([
+          'type', 'page', 'action', 'sessionId', 'recordedAt'
+        ])
+        && request.resource.data.keys().hasAll([
+          'type', 'page', 'action', 'sessionId', 'recordedAt'
+        ])
+        && request.resource.data.type in ['page_view', 'action']
+        && request.resource.data.page is string
+        && request.resource.data.page.size() <= 80
+        && request.resource.data.action is string
+        && request.resource.data.action.size() <= 80
+        && request.resource.data.sessionId is string
+        && request.resource.data.sessionId.size() == 36
+        && request.resource.data.recordedAt == request.time;
+      allow read, update, delete: if isSiteManager();
+    }
+
   }
 }

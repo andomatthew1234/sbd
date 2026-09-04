@@ -69,14 +69,23 @@ function renderEvent(event) {
     addDetail(details, "Accessibility", event.accessibility);
     addDetail(details, "Transport & parking", event.transport);
     addDetail(details, "Refunds", event.refundPolicy);
-    const link = document.createElement("a");
-    link.className = "btn btn-primary cta-btn";
-    link.href = event.squareUrl;
-    link.textContent = "Buy Tickets";
+    let ticketAction;
+    if (event.squareUrl) {
+        const link = document.createElement("a");
+        link.className = "btn btn-primary cta-btn";
+        link.href = event.squareUrl;
+        link.textContent = "Buy Tickets";
+        ticketAction = link;
+    } else {
+        const pending = document.createElement("p");
+        pending.className = "ticket-link-pending";
+        pending.textContent = "Online ticket link coming soon.";
+        ticketAction = pending;
+    }
 
     body.append(venue, tickets);
     if (details.children.length) body.append(details);
-    body.append(link);
+    body.append(ticketAction);
     card.append(header, body);
     eventsList.append(card);
 }
