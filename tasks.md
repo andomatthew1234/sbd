@@ -49,4 +49,6 @@
 - [x] Add a system that lets the site manager edit key events without changing source code.
 - [x] Make event date, time, venue, ticket summary, Square buy links, and publishing status editable in one place.
 - [x] Protect site-manager access with email/password authentication and Firestore permissions.
+- [x] Save public contact form submissions to a private CMS inbox with new, in-progress, and archived statuses.
+- [ ] Add email notifications for new contact submissions when a server-side email service is available.
 - [ ] Add a preview workflow for event changes before publishing.

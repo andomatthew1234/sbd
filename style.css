@@ -695,6 +695,26 @@ h1, h2, h3, h4, h5, h6 {
     margin-bottom: 0;
 }
 
+.contact-form .btn:disabled {
+    cursor: wait;
+    opacity: 0.7;
+}
+
+.form-honeypot {
+    height: 0;
+    overflow: hidden;
+    position: absolute;
+    width: 0;
+}
+
+.form-status {
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.form-status.success { color: #207044; }
+.form-status.error { color: #9b2c2c; }
+
 .event-details {
     border-top: 1px solid var(--light-green);
     display: grid;

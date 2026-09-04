@@ -21,8 +21,19 @@ const eventForm = document.getElementById("event-form");
 const eventList = document.getElementById("event-list");
 const signOutButton = document.getElementById("sign-out");
 const deleteButton = document.getElementById("delete-event");
+const eventsTab = document.getElementById("events-tab");
+const submissionsTab = document.getElementById("submissions-tab");
+const eventsPanel = document.getElementById("events-panel");
+const submissionsPanel = document.getElementById("submissions-panel");
+const submissionsList = document.getElementById("submissions-list");
+const submissionDetail = document.getElementById("submission-detail");
+const submissionFilter = document.getElementById("submission-filter");
+const newSubmissionsCount = document.getElementById("new-submissions-count");
 let events = [];
+let submissions = [];
+let selectedSubmissionId = "";
 let stopListening;
+let stopSubmissionListener;
 
 onAuthStateChanged(auth, user => {
     const isManager = user?.email === "caleb-sbd@sydney-bush-dances.firebaseapp.com";
@@ -31,7 +42,11 @@ onAuthStateChanged(auth, user => {
     signOutButton.hidden = !isManager;
 
     if (stopListening) stopListening();
-    if (isManager) startEventsListener();
+    if (stopSubmissionListener) stopSubmissionListener();
+    if (isManager) {
+        startEventsListener();
+        startSubmissionListener();
+    }
     if (user && !isManager) showLoginError("This account is not authorised to manage Sydney Bush Dances.");
 });
 
@@ -47,6 +62,9 @@ loginForm.addEventListener("submit", async event => {
 
 signOutButton.addEventListener("click", () => signOut(auth));
 document.getElementById("new-event").addEventListener("click", resetForm);
+eventsTab.addEventListener("click", () => showAdminPanel("events"));
+submissionsTab.addEventListener("click", () => showAdminPanel("submissions"));
+submissionFilter.addEventListener("change", renderSubmissions);
 
 eventForm.addEventListener("submit", async event => {
     event.preventDefault();
@@ -91,6 +109,17 @@ function startEventsListener() {
     });
 }
 
+function startSubmissionListener() {
+    stopSubmissionListener = onSnapshot(query(collection(db, "contactSubmissions"), orderBy("submittedAt", "desc")), snapshot => {
+        submissions = snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
+        renderSubmissions();
+        updateNewSubmissionCount();
+    }, error => {
+        console.error("Unable to load submissions:", error);
+        submissionsList.textContent = "Contact submissions could not be loaded.";
+    });
+}
+
 function renderEvents() {
     eventList.replaceChildren();
     if (!events.length) {
@@ -112,6 +141,109 @@ function renderEvents() {
         button.addEventListener("click", () => editEvent(event));
         eventList.append(button);
     });
+}
+
+function showAdminPanel(panel) {
+    const showEvents = panel === "events";
+    eventsPanel.hidden = !showEvents;
+    submissionsPanel.hidden = showEvents;
+    eventsTab.classList.toggle("active", showEvents);
+    submissionsTab.classList.toggle("active", !showEvents);
+    eventsTab.setAttribute("aria-selected", String(showEvents));
+    submissionsTab.setAttribute("aria-selected", String(!showEvents));
+}
+
+function renderSubmissions() {
+    submissionsList.replaceChildren();
+    const filter = submissionFilter.value;
+    const visibleSubmissions = filter === "all" ? submissions : submissions.filter(submission => submission.status === filter);
+
+    if (!visibleSubmissions.length) {
+        submissionsList.textContent = "No contact submissions match this filter.";
+        return;
+    }
+
+    visibleSubmissions.forEach(submission => {
+        const button = document.createElement("button");
+        button.className = "submission-item";
+        button.classList.toggle("active", submission.id === selectedSubmissionId);
+        button.type = "button";
+        const name = document.createElement("strong");
+        name.textContent = submission.name;
+        const subject = document.createElement("span");
+        subject.textContent = `${formatSubject(submission.subject)} | ${formatSubmittedAt(submission.submittedAt)}`;
+        const state = document.createElement("span");
+        state.className = "status";
+        state.textContent = submission.status;
+        button.append(name, subject, state);
+        button.addEventListener("click", () => showSubmission(submission));
+        submissionsList.append(button);
+    });
+}
+
+function showSubmission(submission) {
+    selectedSubmissionId = submission.id;
+    renderSubmissions();
+    submissionDetail.replaceChildren();
+    const heading = document.createElement("h2");
+    heading.textContent = submission.name;
+    const metadata = document.createElement("p");
+    metadata.className = "submission-meta";
+    metadata.textContent = `${formatSubject(submission.subject)} | ${formatSubmittedAt(submission.submittedAt)}`;
+    const email = document.createElement("a");
+    email.href = `mailto:${submission.email}`;
+    email.textContent = submission.email;
+    const message = document.createElement("p");
+    message.className = "submission-message";
+    message.textContent = submission.message;
+    const actions = document.createElement("div");
+    actions.className = "submission-actions";
+    ["new", "in-progress", "archived"].forEach(status => {
+        const button = document.createElement("button");
+        button.className = "button button-small";
+        button.type = "button";
+        button.textContent = status === "in-progress" ? "Mark in progress" : `Mark ${status}`;
+        button.disabled = submission.status === status;
+        button.addEventListener("click", () => updateSubmissionStatus(submission.id, status));
+        actions.append(button);
+    });
+    const remove = document.createElement("button");
+    remove.className = "button button-danger button-small";
+    remove.type = "button";
+    remove.textContent = "Delete";
+    remove.addEventListener("click", () => deleteSubmission(submission.id));
+    actions.append(remove);
+    submissionDetail.append(heading, metadata, email, message, actions);
+}
+
+async function updateSubmissionStatus(id, status) {
+    await updateDoc(doc(db, "contactSubmissions", id), { status, updatedAt: serverTimestamp() });
+}
+
+async function deleteSubmission(id) {
+    if (!window.confirm("Delete this contact submission? This cannot be undone.")) return;
+    await deleteDoc(doc(db, "contactSubmissions", id));
+    selectedSubmissionId = "";
+    submissionDetail.textContent = "Select a submission to view it.";
+}
+
+function updateNewSubmissionCount() {
+    const count = submissions.filter(submission => submission.status === "new").length;
+    newSubmissionsCount.textContent = count;
+    newSubmissionsCount.hidden = count === 0;
+}
+
+function formatSubject(subject) {
+    return {
+        general: "General enquiry",
+        school: "School workshop booking",
+        private: "Private event / wedding"
+    }[subject] || "General enquiry";
+}
+
+function formatSubmittedAt(timestamp) {
+    if (!timestamp?.toDate) return "Just received";
+    return new Intl.DateTimeFormat("en-AU", { dateStyle: "medium", timeStyle: "short" }).format(timestamp.toDate());
 }
 
 function editEvent(event) {

@@ -64,7 +64,7 @@
                 <div class="contact-form-col">
                     <div class="form-card">
                         <h2>Send us a Message</h2>
-                        <form action="#" method="POST" class="contact-form">
+                        <form class="contact-form" id="contact-form">
                             <div class="form-group">
                                 <label for="name">Name</label>
                                 <input type="text" id="name" name="name" required placeholder="Your full name">
@@ -85,6 +85,11 @@
                                 <label for="message">Message</label>
                                 <textarea id="message" name="message" rows="5" required placeholder="How can we help you?"></textarea>
                             </div>
+                            <div class="form-honeypot" aria-hidden="true">
+                                <label for="website">Website</label>
+                                <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+                            </div>
+                            <p id="contact-form-status" class="form-status" role="status" aria-live="polite" hidden></p>
                             <button type="submit" class="btn btn-primary">Send Message</button>
                         </form>
                     </div>
@@ -97,5 +102,6 @@
     <div id="footer-placeholder"></div>
 
     <script src="main.js"></script>
+    <script type="module" src="contact-form.js"></script>
 </body>
 </html>

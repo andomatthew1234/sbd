@@ -11,5 +11,27 @@ service cloud.firestore {
       allow read: if isSiteManager() || resource.data.status == 'published';
       allow create, update, delete: if isSiteManager();
     }
+
+    match /contactSubmissions/{submissionId} {
+      allow create: if request.resource.data.keys().hasOnly([
+          'name', 'email', 'subject', 'message', 'status', 'submittedAt'
+        ])
+        && request.resource.data.keys().hasAll([
+          'name', 'email', 'subject', 'message', 'status', 'submittedAt'
+        ])
+        && request.resource.data.name is string
+        && request.resource.data.name.size() >= 2
+        && request.resource.data.name.size() <= 120
+        && request.resource.data.email is string
+        && request.resource.data.email.size() <= 254
+        && request.resource.data.email.matches('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$')
+        && request.resource.data.subject in ['general', 'school', 'private']
+        && request.resource.data.message is string
+        && request.resource.data.message.size() >= 10
+        && request.resource.data.message.size() <= 4000
+        && request.resource.data.status == 'new'
+        && request.resource.data.submittedAt == request.time;
+      allow read, update, delete: if isSiteManager();
+    }
   }
 }
