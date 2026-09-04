@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(data => {
             document.getElementById("header-placeholder").innerHTML = data;
             highlightActiveNav();
+            initMobileNav();
         })
         .catch(err => console.error("Error loading header:", err));
 
@@ -16,7 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .catch(err => console.error("Error loading footer:", err));
 
-    // Initialize Page Scripts
     initAccordions();
 });
 
@@ -31,18 +31,34 @@ function highlightActiveNav() {
         }
     });
 }
+
+function initMobileNav() {
+    const toggle = document.querySelector(".nav-toggle");
+    const nav = document.querySelector(".site-nav");
+    if (!toggle || !nav) return;
+
+    toggle.addEventListener("click", () => {
+        const isOpen = toggle.getAttribute("aria-expanded") === "true";
+        toggle.setAttribute("aria-expanded", String(!isOpen));
+        nav.classList.toggle("is-open", !isOpen);
+    });
+}
+
 // Handles FAQ Accordions
 function initAccordions() {
     const acc = document.querySelectorAll(".faq-question");
-    acc.forEach(button => {
+    acc.forEach((button, index) => {
+        const panel = button.nextElementSibling;
+        const panelId = `faq-answer-${index + 1}`;
+        button.setAttribute("aria-expanded", "false");
+        button.setAttribute("aria-controls", panelId);
+        panel.id = panelId;
+        panel.hidden = true;
         button.addEventListener("click", function() {
-            this.classList.toggle("active");
-            const panel = this.nextElementSibling;
-            if (panel.style.maxHeight) {
-                panel.style.maxHeight = null;
-            } else {
-                panel.style.maxHeight = panel.scrollHeight + "px";
-            }
+            const isOpen = this.getAttribute("aria-expanded") === "true";
+            this.setAttribute("aria-expanded", String(!isOpen));
+            this.classList.toggle("active", !isOpen);
+            panel.hidden = isOpen;
         });
     });
 }

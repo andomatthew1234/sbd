@@ -52,6 +52,10 @@
                                 <input id="starts-at" type="datetime-local" required>
                             </div>
                             <div>
+                                <label for="ends-at">Finish time</label>
+                                <input id="ends-at" type="time" required>
+                            </div>
+                            <div>
                                 <label for="status">Status</label>
                                 <select id="status" required>
                                     <option value="draft">Draft</option>
@@ -66,8 +70,22 @@
                         <input id="address" type="text" required>
                         <label for="ticket-summary">Ticket summary</label>
                         <input id="ticket-summary" type="text" placeholder="$20 online / $25 at the door / $80 per family" required>
+                        <label for="availability">Availability</label>
+                        <select id="availability" required>
+                            <option value="available">Tickets available</option>
+                            <option value="selling-fast">Selling fast</option>
+                            <option value="sold-out">Sold out</option>
+                        </select>
                         <label for="square-url">Square checkout URL</label>
                         <input id="square-url" type="url" placeholder="https://square.link/u/..." required>
+                        <label for="family-ticket">Family ticket details</label>
+                        <input id="family-ticket" type="text" placeholder="For example: two adults and up to four children">
+                        <label for="accessibility">Accessibility</label>
+                        <textarea id="accessibility" rows="2" placeholder="For example: step-free entry and accessible toilets"></textarea>
+                        <label for="transport">Transport and parking</label>
+                        <textarea id="transport" rows="2" placeholder="For example: on-site parking and a short walk from the station"></textarea>
+                        <label for="refund-policy">Refund policy</label>
+                        <textarea id="refund-policy" rows="2" placeholder="For example: contact us before the event if you can no longer attend"></textarea>
                         <p id="event-error" class="form-message error" role="alert" hidden></p>
                         <p id="event-success" class="form-message success" role="status" hidden></p>
                         <div class="form-actions">

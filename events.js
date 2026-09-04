@@ -30,6 +30,7 @@ async function loadEvents(db) {
         }
 
         events.forEach(renderEvent);
+        addEventStructuredData(events);
     } catch (error) {
         console.error("Unable to load events:", error);
         showMessage("Upcoming dance details are temporarily unavailable. Please try again soon.");
@@ -60,14 +61,86 @@ function renderEvent(event) {
     const ticketsLabel = document.createElement("strong");
     ticketsLabel.textContent = "Tickets:";
     tickets.append(ticketsLabel, ` ${event.ticketSummary}`);
+    const details = document.createElement("dl");
+    details.className = "event-details";
+    addDetail(details, "Time", formatTime(event.startsAt, event.endsAt));
+    addDetail(details, "Availability", formatAvailability(event.availability));
+    addDetail(details, "Family ticket", event.familyTicket);
+    addDetail(details, "Accessibility", event.accessibility);
+    addDetail(details, "Transport & parking", event.transport);
+    addDetail(details, "Refunds", event.refundPolicy);
     const link = document.createElement("a");
     link.className = "btn btn-primary cta-btn";
     link.href = event.squareUrl;
     link.textContent = "Buy Tickets";
 
-    body.append(venue, tickets, link);
+    body.append(venue, tickets);
+    if (details.children.length) body.append(details);
+    body.append(link);
     card.append(header, body);
     eventsList.append(card);
+}
+
+function addDetail(container, label, value) {
+    if (!value) return;
+    const term = document.createElement("dt");
+    term.textContent = `${label}:`;
+    const description = document.createElement("dd");
+    description.textContent = value;
+    container.append(term, description);
+}
+
+function formatTime(startsAt, endsAt) {
+    if (!startsAt) return "";
+    const start = new Date(startsAt);
+    if (Number.isNaN(start.getTime())) return "";
+    const time = new Intl.DateTimeFormat("en-AU", { hour: "numeric", minute: "2-digit" }).format(start);
+    return endsAt ? `${time} to ${formatEndTime(endsAt)}` : time;
+}
+
+function formatEndTime(time) {
+    const [hour, minute] = time.split(":").map(Number);
+    const date = new Date();
+    date.setHours(hour, minute, 0, 0);
+    return new Intl.DateTimeFormat("en-AU", { hour: "numeric", minute: "2-digit" }).format(date);
+}
+
+function formatAvailability(availability) {
+    return {
+        "selling-fast": "Selling fast",
+        "sold-out": "Sold out",
+        available: "Tickets available"
+    }[availability] || "";
+}
+
+function addEventStructuredData(events) {
+    const script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.textContent = JSON.stringify(events.map(event => ({
+        "@context": "https://schema.org",
+        "@type": "Event",
+        name: `Sydney Bush Dance - ${event.location}`,
+        startDate: event.startsAt,
+        endDate: event.endsAt ? `${event.startsAt.slice(0, 10)}T${event.endsAt}` : undefined,
+        eventStatus: "https://schema.org/EventScheduled",
+        eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+        location: {
+            "@type": "Place",
+            name: event.venueName,
+            address: event.address
+        },
+        offers: {
+            "@type": "Offer",
+            url: event.squareUrl,
+            availability: event.availability === "sold-out" ? "https://schema.org/SoldOut" : "https://schema.org/InStock"
+        },
+        organizer: {
+            "@type": "Organization",
+            name: "Sydney Bush Dances",
+            url: "https://andomatthew1234.github.io/sbd/"
+        }
+    })));
+    document.head.append(script);
 }
 
 function showMessage(message) {

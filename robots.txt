@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://andomatthew1234.github.io/sbd/sitemap.xml

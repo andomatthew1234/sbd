@@ -120,11 +120,17 @@ function editEvent(event) {
     document.getElementById("location").value = event.location || "";
     document.getElementById("date-label").value = event.dateLabel || "";
     document.getElementById("starts-at").value = event.startsAt || "";
+    document.getElementById("ends-at").value = event.endsAt || "";
     document.getElementById("status").value = event.status || "draft";
     document.getElementById("venue-name").value = event.venueName || "";
     document.getElementById("address").value = event.address || "";
     document.getElementById("ticket-summary").value = event.ticketSummary || "";
+    document.getElementById("availability").value = event.availability || "available";
     document.getElementById("square-url").value = event.squareUrl || "";
+    document.getElementById("family-ticket").value = event.familyTicket || "";
+    document.getElementById("accessibility").value = event.accessibility || "";
+    document.getElementById("transport").value = event.transport || "";
+    document.getElementById("refund-policy").value = event.refundPolicy || "";
     deleteButton.hidden = false;
     showEventMessage("", "");
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -143,11 +149,17 @@ function getFormData() {
         location: document.getElementById("location").value.trim(),
         dateLabel: document.getElementById("date-label").value.trim(),
         startsAt: document.getElementById("starts-at").value,
+        endsAt: document.getElementById("ends-at").value,
         status: document.getElementById("status").value,
         venueName: document.getElementById("venue-name").value.trim(),
         address: document.getElementById("address").value.trim(),
         ticketSummary: document.getElementById("ticket-summary").value.trim(),
-        squareUrl: document.getElementById("square-url").value.trim()
+        availability: document.getElementById("availability").value,
+        squareUrl: document.getElementById("square-url").value.trim(),
+        familyTicket: document.getElementById("family-ticket").value.trim(),
+        accessibility: document.getElementById("accessibility").value.trim(),
+        transport: document.getElementById("transport").value.trim(),
+        refundPolicy: document.getElementById("refund-policy").value.trim()
     };
 }
 
@@ -158,8 +170,8 @@ function validateEvent(event) {
     } catch {
         return "Enter a valid HTTPS Square checkout URL before saving.";
     }
-    if (checkoutUrl.protocol !== "https:" || !["square.link", "squareup.com"].some(domain => checkoutUrl.hostname === domain || checkoutUrl.hostname.endsWith(`.${domain}`))) {
-        return "Enter a valid HTTPS Square checkout URL before saving.";
+    if (checkoutUrl.protocol !== "https:" || checkoutUrl.hostname.includes("placeholder")) {
+        return "Enter a real HTTPS checkout URL before saving.";
     }
     return "";
 }

@@ -21,8 +21,9 @@ h1 { margin-bottom: 0; }
 .panel-title, .form-actions { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
 form { display: grid; gap: .7rem; }
 label { margin-top: .5rem; font-weight: 700; font-size: .92rem; }
-input, select { width: 100%; border: 1px solid var(--line); border-radius: 5px; padding: .75rem; font: inherit; color: var(--ink); }
-input:focus, select:focus { outline: 3px solid rgb(212 163 89 / 35%); border-color: var(--gold); }
+input, select, textarea { width: 100%; border: 1px solid var(--line); border-radius: 5px; padding: .75rem; font: inherit; color: var(--ink); }
+textarea { resize: vertical; }
+input:focus, select:focus, textarea:focus { outline: 3px solid rgb(212 163 89 / 35%); border-color: var(--gold); }
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 1rem; }
 .button { border: 0; border-radius: 5px; padding: .8rem 1rem; background: var(--green); color: white; font: inherit; font-weight: 700; cursor: pointer; }
 .button:hover { background: #0e2c1e; }
