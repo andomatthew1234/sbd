@@ -20,6 +20,21 @@ h1 { margin-bottom: 0; }
 .manager-layout { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(280px, 1fr); gap: 2rem; }
 .submissions-layout { display: grid; grid-template-columns: minmax(280px, .85fr) minmax(0, 1.15fr); gap: 2rem; }
 .dashboard-layout { display: grid; grid-template-columns: 235px minmax(0, 1fr); gap: 2rem; align-items: start; }
+.analytics-heading { margin: .5rem 0 1.5rem; }
+.analytics-heading h2 { font-size: 2.25rem; margin-bottom: .5rem; }
+.analytics-heading > p:last-child { color: var(--muted); margin: 0; max-width: 680px; }
+.analytics-summary { display: grid; gap: 1.25rem; grid-template-columns: repeat(3, 1fr); margin-bottom: 1.5rem; }
+.metric-card { padding: 1.5rem; }
+.metric-label { color: var(--muted); font-size: .8rem; font-weight: 700; letter-spacing: .08em; margin: 0; text-transform: uppercase; }
+.metric-value { color: var(--green); font-size: 2.5rem; font-weight: 700; line-height: 1; margin: .7rem 0; }
+.metric-note { color: var(--muted); font-size: .85rem; margin: 0; }
+.analytics-layout { display: grid; gap: 1.5rem; grid-template-columns: repeat(3, 1fr); }
+.analytics-list { display: grid; gap: .6rem; }
+.analytics-list > p { color: var(--muted); margin: 0; }
+.analytics-item { align-items: baseline; border-bottom: 1px solid var(--line); display: flex; gap: .75rem; justify-content: space-between; padding: .65rem 0; }
+.analytics-item:last-child { border-bottom: 0; }
+.analytics-item strong { font-size: .92rem; }
+.analytics-item span { color: var(--muted); font-size: .85rem; text-align: right; }
 .dashboard-sidebar { background: var(--green); border-radius: 10px; box-shadow: 0 8px 24px rgb(0 0 0 / 8%); padding: 1rem .75rem; position: sticky; top: 1rem; }
 .sidebar-label { color: #bfd0c4; font-size: .72rem; font-weight: 700; letter-spacing: .12em; margin: .5rem .75rem .75rem; text-transform: uppercase; }
 .sidebar-item { align-items: center; background: transparent; border: 0; border-radius: 6px; color: #ecf3ee; cursor: pointer; display: flex; font: inherit; font-size: .92rem; font-weight: 700; gap: .75rem; padding: .8rem .75rem; text-align: left; width: 100%; }
@@ -64,7 +79,7 @@ input:focus, select:focus, textarea:focus { outline: 3px solid rgb(212 163 89 / 
 
 @media (max-width: 760px) {
     .admin-shell { padding-top: 1.5rem; }
-    .dashboard-layout, .manager-layout, .submissions-layout, .form-grid { grid-template-columns: 1fr; }
+    .dashboard-layout, .manager-layout, .submissions-layout, .form-grid, .analytics-summary, .analytics-layout { grid-template-columns: 1fr; }
     .dashboard-sidebar { display: flex; gap: .5rem; overflow-x: auto; padding: .5rem; position: static; }
     .sidebar-label { display: none; }
     .sidebar-item { flex: 1 0 max-content; width: auto; }

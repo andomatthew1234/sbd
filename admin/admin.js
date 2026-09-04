@@ -1,6 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 import { addDoc, collection, deleteDoc, doc, getFirestore, onSnapshot, orderBy, query, serverTimestamp, updateDoc } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+import { getDatabase, onValue, ref } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyCMRd-sHY6cdYdhxTiSydFYnNtNiwpntXo",
@@ -8,12 +9,14 @@ const firebaseConfig = {
     projectId: "sydney-bush-dances",
     storageBucket: "sydney-bush-dances.firebasestorage.app",
     messagingSenderId: "88990952307",
-    appId: "1:88990952307:web:ec772751a9f939ccb5f306"
+    appId: "1:88990952307:web:ec772751a9f939ccb5f306",
+    databaseURL: "https://sydney-bush-dances-default-rtdb.firebaseio.com"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const realtimeDb = getDatabase(app);
 const loginPanel = document.getElementById("login-panel");
 const managerPanel = document.getElementById("manager-panel");
 const loginForm = document.getElementById("login-form");
@@ -21,8 +24,10 @@ const eventForm = document.getElementById("event-form");
 const eventList = document.getElementById("event-list");
 const signOutButton = document.getElementById("sign-out");
 const deleteButton = document.getElementById("delete-event");
+const analyticsTab = document.getElementById("analytics-tab");
 const eventsTab = document.getElementById("events-tab");
 const submissionsTab = document.getElementById("submissions-tab");
+const analyticsPanel = document.getElementById("analytics-panel");
 const eventsPanel = document.getElementById("events-panel");
 const submissionsPanel = document.getElementById("submissions-panel");
 const submissionsList = document.getElementById("submissions-list");
@@ -34,6 +39,9 @@ let submissions = [];
 let selectedSubmissionId = "";
 let stopListening;
 let stopSubmissionListener;
+let stopPresenceListener;
+let stopPageViewListener;
+let stopConversionListener;
 
 onAuthStateChanged(auth, user => {
     const isManager = user?.email === "caleb-sbd@sydney-bush-dances.firebaseapp.com";
@@ -43,9 +51,13 @@ onAuthStateChanged(auth, user => {
 
     if (stopListening) stopListening();
     if (stopSubmissionListener) stopSubmissionListener();
+    if (stopPresenceListener) stopPresenceListener();
+    if (stopPageViewListener) stopPageViewListener();
+    if (stopConversionListener) stopConversionListener();
     if (isManager) {
         startEventsListener();
         startSubmissionListener();
+        startAnalyticsListeners();
     }
     if (user && !isManager) showLoginError("This account is not authorised to manage Sydney Bush Dances.");
 });
@@ -62,6 +74,7 @@ loginForm.addEventListener("submit", async event => {
 
 signOutButton.addEventListener("click", () => signOut(auth));
 document.getElementById("new-event").addEventListener("click", resetForm);
+analyticsTab.addEventListener("click", () => showAdminPanel("analytics"));
 eventsTab.addEventListener("click", () => showAdminPanel("events"));
 submissionsTab.addEventListener("click", () => showAdminPanel("submissions"));
 submissionFilter.addEventListener("change", renderSubmissions);
@@ -144,13 +157,77 @@ function renderEvents() {
 }
 
 function showAdminPanel(panel) {
-    const showEvents = panel === "events";
-    eventsPanel.hidden = !showEvents;
-    submissionsPanel.hidden = showEvents;
-    eventsTab.classList.toggle("active", showEvents);
-    submissionsTab.classList.toggle("active", !showEvents);
-    eventsTab.setAttribute("aria-current", showEvents ? "page" : "false");
-    submissionsTab.setAttribute("aria-current", showEvents ? "false" : "page");
+    const activePanels = { analytics: analyticsPanel, events: eventsPanel, submissions: submissionsPanel };
+    Object.entries(activePanels).forEach(([name, element]) => { element.hidden = name !== panel; });
+    [analyticsTab, eventsTab, submissionsTab].forEach(tab => {
+        const isActive = tab.id === `${panel}-tab`;
+        tab.classList.toggle("active", isActive);
+        tab.setAttribute("aria-current", isActive ? "page" : "false");
+    });
+}
+
+function startAnalyticsListeners() {
+    stopPresenceListener = onValue(ref(realtimeDb, "presence"), snapshot => {
+        const visitors = Object.values(snapshot.val() || {}).filter(visitor => visitor.lastSeen >= Date.now() - 300000);
+        renderLiveVisitors(visitors);
+    }, error => {
+        console.error("Unable to load live visitors:", error);
+        document.getElementById("live-visitor-note").textContent = "Live analytics is unavailable until Realtime Database is enabled.";
+        document.getElementById("live-visitors-list").textContent = "Live analytics is currently unavailable.";
+    });
+
+    stopPageViewListener = onValue(ref(realtimeDb, "analytics/allTime/pages"), snapshot => {
+        renderAnalyticsTotals(snapshot.val() || {}, "page-views-list", "all-time-page-views", "No page views have been recorded yet.");
+    });
+    stopConversionListener = onValue(ref(realtimeDb, "analytics/allTime/actions"), snapshot => {
+        renderAnalyticsTotals(snapshot.val() || {}, "conversions-list", "all-time-conversions", "No conversions have been recorded yet.");
+    });
+}
+
+function renderLiveVisitors(visitors) {
+    document.getElementById("live-visitor-count").textContent = visitors.length;
+    document.getElementById("live-visitor-note").textContent = visitors.length ? "Active in the last five minutes." : "Waiting for live activity.";
+    const list = document.getElementById("live-visitors-list");
+    list.replaceChildren();
+    if (!visitors.length) {
+        list.textContent = "Waiting for live activity.";
+        return;
+    }
+    visitors.sort((a, b) => b.lastSeen - a.lastSeen).forEach(visitor => {
+        const item = document.createElement("div");
+        item.className = "analytics-item";
+        const page = document.createElement("strong");
+        page.textContent = formatAnalyticsName(visitor.page);
+        const action = document.createElement("span");
+        action.textContent = formatAnalyticsName(visitor.action || "viewing_page");
+        item.append(page, action);
+        list.append(item);
+    });
+}
+
+function renderAnalyticsTotals(values, listId, totalId, emptyMessage) {
+    const entries = Object.entries(values).sort(([, first], [, second]) => second - first);
+    document.getElementById(totalId).textContent = entries.reduce((total, [, value]) => total + value, 0).toLocaleString("en-AU");
+    const list = document.getElementById(listId);
+    list.replaceChildren();
+    if (!entries.length) {
+        list.textContent = emptyMessage;
+        return;
+    }
+    entries.forEach(([name, value]) => {
+        const item = document.createElement("div");
+        item.className = "analytics-item";
+        const label = document.createElement("strong");
+        label.textContent = formatAnalyticsName(name);
+        const count = document.createElement("span");
+        count.textContent = Number(value).toLocaleString("en-AU");
+        item.append(label, count);
+        list.append(item);
+    });
+}
+
+function formatAnalyticsName(value) {
+    return String(value).replace(/\.html$/, "").replaceAll("_", " ").replace(/\b\w/g, letter => letter.toUpperCase());
 }
 
 function renderSubmissions() {
