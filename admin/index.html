@@ -99,6 +99,26 @@
                         </section>
                     </div>
                     <div id="events-panel" aria-labelledby="events-tab">
+                        <section class="panel ticketing-settings">
+                            <div class="panel-title">
+                                <div>
+                                    <p class="eyebrow">Universal ticketing</p>
+                                    <h2>Ticket links</h2>
+                                </div>
+                            </div>
+                            <p>These links appear on every published event. Choose the ticket type when booking.</p>
+                            <form id="ticketing-form">
+                                <label for="standard-ticket-url">Standard ticket link</label>
+                                <input id="standard-ticket-url" type="url" placeholder="https://square.link/u/..." required>
+                                <label for="family-ticket-url">Family ticket link</label>
+                                <input id="family-ticket-url" type="url" placeholder="https://square.link/u/..." required>
+                                <p id="ticketing-error" class="form-message error" role="alert" hidden></p>
+                                <p id="ticketing-success" class="form-message success" role="status" hidden></p>
+                                <div class="form-actions">
+                                    <button class="button" type="submit">Save ticket links</button>
+                                </div>
+                            </form>
+                        </section>
                         <div class="manager-layout">
                             <section class="panel">
                     <div class="panel-title">
@@ -145,8 +165,6 @@
                             <option value="selling-fast">Selling fast</option>
                             <option value="sold-out">Sold out</option>
                         </select>
-                        <label for="square-url">Square checkout URL</label>
-                        <input id="square-url" type="url" placeholder="https://square.link/u/..." required>
                         <label for="family-ticket">Family ticket details</label>
                         <input id="family-ticket" type="text" placeholder="For example: two adults and up to four children">
                         <label for="accessibility">Accessibility</label>

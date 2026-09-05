@@ -16,6 +16,8 @@ body { margin: 0; background: var(--cream); color: var(--ink); font-family: Aria
 h1, h2 { color: var(--green); margin-top: 0; }
 h1 { margin-bottom: 0; }
 .panel { padding: 2rem; background: #fff; border-radius: 10px; box-shadow: 0 8px 24px rgb(0 0 0 / 8%); }
+.ticketing-settings { margin-bottom: 2rem; }
+.ticketing-settings > p { color: var(--muted); margin-top: 0; }
 .login-panel { width: min(460px, 100%); margin: 5rem auto; }
 .manager-layout { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(280px, 1fr); gap: 2rem; }
 .submissions-layout { display: grid; grid-template-columns: minmax(280px, .85fr) minmax(0, 1.15fr); gap: 2rem; }

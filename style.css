@@ -661,6 +661,12 @@ h1, h2 { line-height: 1.08; }
     width: 100%;
 }
 
+.ticket-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .75rem;
+}
+
 /* Educational Workshop Cards */
 .levels-grid {
     display: grid;

@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+import { getDoc, getFirestore, collection, doc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 import { firebaseConfig } from "./firebase-config.js";
 
 const eventsList = document.getElementById("events-list");
@@ -13,12 +13,15 @@ if (eventsList) {
 
 async function loadEvents(db) {
     try {
-        const eventsQuery = query(
+        const [eventsSnapshot, ticketingSnapshot] = await Promise.all([
+            getDocs(query(
             collection(db, "events"),
             where("status", "==", "published")
-        );
-        const snapshot = await getDocs(eventsQuery);
-        const events = snapshot.docs
+            )),
+            getDoc(doc(db, "siteSettings", "ticketing"))
+        ]);
+        const ticketing = ticketingSnapshot.exists() ? ticketingSnapshot.data() : {};
+        const events = eventsSnapshot.docs
             .map(document => ({ id: document.id, ...document.data() }))
             .sort((first, second) => first.startsAt.localeCompare(second.startsAt));
 
@@ -29,15 +32,15 @@ async function loadEvents(db) {
             return;
         }
 
-        events.forEach(renderEvent);
-        addEventStructuredData(events);
+        events.forEach(event => renderEvent(event, ticketing));
+        addEventStructuredData(events, ticketing);
     } catch (error) {
         console.error("Unable to load events:", error);
         showMessage("Upcoming dance details are temporarily unavailable. Please try again soon.");
     }
 }
 
-function renderEvent(event) {
+function renderEvent(event, ticketing) {
     const card = document.createElement("article");
     card.className = "gig-card";
 
@@ -69,25 +72,33 @@ function renderEvent(event) {
     addDetail(details, "Accessibility", event.accessibility);
     addDetail(details, "Transport & parking", event.transport);
     addDetail(details, "Refunds", event.refundPolicy);
-    let ticketAction;
-    if (event.squareUrl) {
-        const link = document.createElement("a");
-        link.className = "btn btn-primary cta-btn";
-        link.href = event.squareUrl;
-        link.textContent = "Buy Tickets";
-        ticketAction = link;
-    } else {
+    const ticketActions = document.createElement("div");
+    ticketActions.className = "ticket-actions";
+    addTicketLink(ticketActions, "Standard tickets", ticketing.standardUrl);
+    addTicketLink(ticketActions, "Family tickets", ticketing.familyUrl);
+    if (!ticketActions.children.length) {
         const pending = document.createElement("p");
         pending.className = "ticket-link-pending";
-        pending.textContent = "Online ticket link coming soon.";
-        ticketAction = pending;
+        pending.textContent = "Online ticket links coming soon.";
+        ticketActions.append(pending);
     }
 
     body.append(venue, tickets);
     if (details.children.length) body.append(details);
-    body.append(ticketAction);
+    body.append(ticketActions);
     card.append(header, body);
     eventsList.append(card);
+}
+
+function addTicketLink(container, label, url) {
+    if (!url) return;
+    const link = document.createElement("a");
+    link.className = "btn btn-primary cta-btn";
+    link.href = url;
+    link.target = "_blank";
+    link.rel = "noopener";
+    link.textContent = label;
+    container.append(link);
 }
 
 function addDetail(container, label, value) {
@@ -122,7 +133,7 @@ function formatAvailability(availability) {
     }[availability] || "";
 }
 
-function addEventStructuredData(events) {
+function addEventStructuredData(events, ticketing) {
     const script = document.createElement("script");
     script.type = "application/ld+json";
     script.textContent = JSON.stringify(events.map(event => ({
@@ -140,7 +151,7 @@ function addEventStructuredData(events) {
         },
         offers: {
             "@type": "Offer",
-            url: event.squareUrl,
+            url: ticketing.standardUrl,
             availability: event.availability === "sold-out" ? "https://schema.org/SoldOut" : "https://schema.org/InStock"
         },
         organizer: {
