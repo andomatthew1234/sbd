@@ -63,7 +63,7 @@ function renderEvent(event, ticketing) {
     const tickets = document.createElement("p");
     const ticketsLabel = document.createElement("strong");
     ticketsLabel.textContent = "Tickets:";
-    tickets.append(ticketsLabel, ` ${event.ticketSummary}`);
+    tickets.append(ticketsLabel, " Choose Standard or Family tickets below.");
     const details = document.createElement("dl");
     details.className = "event-details";
     addDetail(details, "Time", formatTime(event.startsAt, event.endsAt));
