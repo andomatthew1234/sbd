@@ -3,6 +3,10 @@ import { getDoc, getFirestore, collection, doc, getDocs, query, where } from "ht
 import { firebaseConfig } from "./firebase-config.js";
 
 const eventsList = document.getElementById("events-list");
+const defaultTicketing = {
+    standardUrl: "https://square.link/u/q9M27Sd5",
+    familyUrl: "https://square.link/u/biMNCMCt"
+};
 
 if (eventsList) {
     const app = initializeApp(firebaseConfig);
@@ -20,7 +24,7 @@ async function loadEvents(db) {
             )),
             getDoc(doc(db, "siteSettings", "ticketing"))
         ]);
-        const ticketing = ticketingSnapshot.exists() ? ticketingSnapshot.data() : {};
+        const ticketing = { ...defaultTicketing, ...(ticketingSnapshot.exists() ? ticketingSnapshot.data() : {}) };
         const events = eventsSnapshot.docs
             .map(document => ({ id: document.id, ...document.data() }))
             .sort((first, second) => first.startsAt.localeCompare(second.startsAt));
