@@ -676,10 +676,13 @@ h1, h2 { line-height: 1.08; }
 
 .level-card {
     background: var(--white);
+    color: inherit;
+    display: block;
     padding: 3rem 2rem;
     border: 1px solid var(--line);
     border-radius: 16px;
     text-align: center;
+    text-decoration: none;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
     border-top: 5px solid var(--gold-accent);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -700,6 +703,15 @@ h1, h2 { line-height: 1.08; }
     color: #4a544f;
     font-weight: 600;
     margin: 0;
+}
+
+.level-link-label {
+    color: var(--primary-dark-green);
+    display: inline-block;
+    font-weight: 700;
+    margin-top: 1.25rem;
+    text-decoration: underline;
+    text-underline-offset: .2em;
 }
 
 /* Team Grid Layout */
