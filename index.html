@@ -5,21 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sydney Bush Dances | Home</title>
     <meta name="description" content="Sydney Bush Dances brings live music, expert callers, and welcoming Australian bush dances to Sydney and surrounding areas.">
-    <link rel="canonical" href="https://andomatthew1234.github.io/sbd/">
+    <link rel="canonical" href="https://sydneybushdances.com/">
     <meta property="og:type" content="website">
     <meta property="og:title" content="Sydney Bush Dances">
     <meta property="og:description" content="Live music, expert callers, and welcoming Australian bush dances in Sydney.">
-    <meta property="og:url" content="https://andomatthew1234.github.io/sbd/">
-    <meta property="og:image" content="https://andomatthew1234.github.io/sbd/assets/logo_green.png">
-    <meta name="twitter:card" content="summary">
-    <link rel="icon" type="image/png" href="assets/logo_white.png">
+    <meta property="og:url" content="https://sydneybushdances.com/">
+    <meta property="og:image" content="https://sydneybushdances.com/assets/media/optimized/og-home.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" type="image/png" href="assets/media/optimized/favicon-96.png">
     <link rel="stylesheet" href="style.css">
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
         "@type": "Organization",
         "name": "Sydney Bush Dances",
-        "url": "https://andomatthew1234.github.io/sbd/",
+        "url": "https://sydneybushdances.com/",
         "email": "sydneybushdances@outlook.com",
         "telephone": "+61416530971",
         "identifier": "ABN 61 351 289 350",
@@ -32,6 +32,11 @@
     <div id="header-placeholder"></div>
     <main id="main-content">
         <section class="hero">
+            <video class="hero-video" autoplay muted loop playsinline preload="metadata"
+                   poster="assets/media/optimized/hero-poster-1600.webp" aria-hidden="true">
+                <source media="(max-width: 600px)" src="assets/media/optimized/hero-mobile.mp4" type="video/mp4">
+                <source src="assets/media/optimized/hero-desktop.mp4" type="video/mp4">
+            </video>
             <div class="hero-overlay">
                 <p class="hero-kicker">Live music. Called dances. All welcome.</p>
                 <h1>Sydney Bush Dances</h1>
@@ -51,9 +56,16 @@
                     <p>Join us one evening to experience a night of true Australian culture! We have a talented team of performers who bring the energy and infectious spirit of traditional bush dancing to life. Whether you're a seasoned dancer or it's your first time, there's something for everyone!</p>
                     <a href="dances.html" class="btn">See All Upcoming Dates</a>
                 </div>
-                <div class="intro-image">
-                    <img src="assets/gallery/IMG_0601.jpeg" alt="Sydney Bush Dances performers and guests at an event" class="featured-img">
-                </div>
+                <figure class="story-media">
+                    <picture>
+                        <source srcset="assets/media/optimized/home-story-640.webp 640w, assets/media/optimized/home-story-1247.webp 1247w"
+                                sizes="(max-width: 900px) 100vw, 50vw" type="image/webp">
+                        <img src="assets/media/optimized/home-story-1247.webp" width="1247" height="702"
+                             loading="lazy" decoding="async"
+                             alt="Dancers forming an arch together at a Sydney Bush Dance">
+                    </picture>
+                    <figcaption>Called dances make it easy to join in, meet people, and move together.</figcaption>
+                </figure>
             </div>
         </section>
 
@@ -73,10 +85,11 @@
                     <p>Every Sydney Bush Dance brings live music, a caller, and a welcoming room ready to get moving.</p>
                     <a href="dances.html" class="btn">Find your next dance</a>
                 </div>
-                <figure class="home-gallery-photo">
-                    <img src="assets/gallery/hall.jpeg" alt="The hall prepared for a Sydney Bush Dance">
-                    <figcaption>A place for music, movement, and community.</figcaption>
-                </figure>
+                <div class="home-gallery-points" role="list" aria-label="What makes the night special">
+                    <p role="listitem"><strong>01</strong><span>A live band gives every dance its lift.</span></p>
+                    <p role="listitem"><strong>02</strong><span>A caller teaches the steps as you go.</span></p>
+                    <p role="listitem"><strong>03</strong><span>The whole room becomes part of the dance.</span></p>
+                </div>
             </div>
         </section>
     </main>
