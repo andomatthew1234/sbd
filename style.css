@@ -1853,6 +1853,329 @@ h1, h2 { line-height: 1.08; }
     }
 }
 
+/* Pricing page editorial layout */
+.pricing-overview-section {
+    background: var(--primary-dark-green);
+    overflow: hidden;
+}
+
+.pricing-overview-media {
+    margin: 0;
+    position: relative;
+}
+
+.pricing-overview-media picture,
+.pricing-overview-media img {
+    display: block;
+    width: 100%;
+}
+
+.pricing-overview-media img {
+    height: clamp(480px, 52vw, 650px);
+    object-fit: cover;
+}
+
+.pricing-overview-copy {
+    background: rgba(11, 45, 32, .95);
+    border-left: 5px solid var(--accent-light);
+    bottom: 0;
+    color: var(--text-light);
+    left: max(1rem, calc((100vw - 1100px) / 2));
+    max-width: 620px;
+    padding: clamp(1.75rem, 4vw, 3rem);
+    position: absolute;
+}
+
+.pricing-overview-copy h2 {
+    color: var(--text-light);
+    font-size: clamp(2.2rem, 4vw, 3.5rem);
+    margin-bottom: 1rem;
+}
+
+.pricing-overview-copy > p:last-child {
+    color: #dbe6df;
+    font-size: 1.08rem;
+    margin: 0;
+}
+
+.pricing-page-kicker {
+    color: var(--accent-deep);
+    font-family: var(--heading-font);
+    font-size: .82rem;
+    font-weight: 700;
+    letter-spacing: .045em;
+    margin-bottom: .65rem;
+}
+
+.pricing-overview-copy .pricing-page-kicker {
+    color: var(--accent-light);
+}
+
+.pricing-offers-section {
+    background: var(--paper);
+}
+
+.pricing-section-heading {
+    margin-bottom: clamp(2.5rem, 5vw, 4rem);
+    max-width: 760px;
+}
+
+.pricing-section-heading h2,
+.pricing-guide-intro h2 {
+    color: var(--primary-dark-green);
+    font-size: clamp(2.35rem, 4.5vw, 3.6rem);
+    margin-bottom: 1rem;
+}
+
+.pricing-section-heading > p:last-child,
+.pricing-guide-intro > p:not(.pricing-page-kicker) {
+    color: #4a544f;
+    font-size: 1.08rem;
+}
+
+.pricing-offers-grid {
+    align-items: stretch;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.pricing-offer {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-top: 5px solid var(--accent-deep);
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: clamp(1.6rem, 3vw, 2.35rem);
+}
+
+.pricing-offer-heading {
+    min-height: 9.25rem;
+}
+
+.pricing-offer-number {
+    color: var(--accent-light);
+    display: block;
+    font: 700 1.6rem var(--heading-font);
+    margin-bottom: 1rem;
+}
+
+.pricing-offer-kicker {
+    color: var(--accent-deep);
+    font-size: .78rem;
+    font-weight: 700;
+    letter-spacing: .035em;
+    margin-bottom: .45rem;
+}
+
+.pricing-offer h3 {
+    color: var(--primary-dark-green);
+    font-size: clamp(1.65rem, 2.6vw, 2.15rem);
+    line-height: 1.08;
+}
+
+.pricing-offer-price {
+    color: var(--primary-dark-green);
+    font: 700 clamp(2.3rem, 4vw, 3.1rem) / 1 var(--heading-font);
+    margin: 1.5rem 0 1.25rem;
+}
+
+.pricing-offer-price > span:not(.pricing-price-prefix) {
+    display: block;
+    font: 600 .95rem var(--body-font);
+    margin-top: .45rem;
+}
+
+.pricing-price-prefix {
+    display: block;
+    font: 700 .78rem var(--body-font);
+    letter-spacing: .04em;
+    margin-bottom: .4rem;
+}
+
+.pricing-offer-summary {
+    color: #4a544f;
+    margin-bottom: 1.4rem;
+}
+
+.pricing-offer-details {
+    border-top: 1px solid var(--line);
+    list-style: none;
+    margin: 0 0 2rem;
+    padding: 1.1rem 0 0;
+}
+
+.pricing-offer-details li {
+    color: #4a544f;
+    display: grid;
+    font-size: .92rem;
+    gap: .55rem;
+    grid-template-columns: auto 1fr;
+    line-height: 1.45;
+    margin-bottom: .7rem;
+}
+
+.pricing-offer-details li::before {
+    color: var(--accent-deep);
+    content: '—';
+    font-weight: 700;
+}
+
+.pricing-offer .btn {
+    margin-top: auto;
+    text-align: center;
+    width: 100%;
+}
+
+.pricing-offer-featured {
+    background: var(--primary-dark-green);
+    border-color: var(--primary-dark-green);
+    color: var(--text-light);
+}
+
+.pricing-offer-featured .pricing-offer-number,
+.pricing-offer-featured .pricing-offer-kicker {
+    color: var(--accent-light);
+}
+
+.pricing-offer-featured h3,
+.pricing-offer-featured .pricing-offer-price {
+    color: var(--text-light);
+}
+
+.pricing-offer-featured .pricing-offer-summary,
+.pricing-offer-featured .pricing-offer-details li {
+    color: #dbe6df;
+}
+
+.pricing-offer-featured .pricing-offer-details {
+    border-top-color: rgba(255, 255, 255, .2);
+}
+
+.pricing-offer-featured .pricing-offer-details li::before {
+    color: var(--accent-light);
+}
+
+.pricing-featured-button {
+    background: var(--accent-light);
+    border-color: var(--accent-light);
+    color: var(--primary-dark-green);
+}
+
+.pricing-featured-button:hover {
+    background: #f6b69d;
+    border-color: #f6b69d;
+    color: var(--primary-dark-green);
+}
+
+.pricing-guide-section {
+    background: var(--white);
+}
+
+.pricing-guide-layout {
+    align-items: start;
+    display: grid;
+    gap: clamp(3rem, 7vw, 6rem);
+    grid-template-columns: minmax(260px, .72fr) minmax(0, 1.28fr);
+}
+
+.pricing-guide-intro {
+    border-left: 5px solid var(--accent-deep);
+    padding-left: clamp(1.25rem, 3vw, 2rem);
+}
+
+.pricing-guide-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .75rem;
+    margin-top: 2rem;
+}
+
+.pricing-outline-button {
+    background: transparent;
+    border-color: var(--primary-dark-green);
+    color: var(--primary-dark-green);
+}
+
+.pricing-outline-button:hover {
+    background: var(--primary-dark-green);
+    color: var(--white);
+}
+
+.pricing-booking-routes {
+    border-top: 1px solid var(--line);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.pricing-booking-routes li {
+    align-items: start;
+    border-bottom: 1px solid var(--line);
+    display: grid;
+    gap: 1rem 1.25rem;
+    grid-template-columns: 2.5rem minmax(130px, .5fr) minmax(0, 1fr);
+    padding: 1.5rem 0;
+}
+
+.pricing-booking-routes span {
+    color: var(--accent-deep);
+    font: 700 1.15rem var(--heading-font);
+}
+
+.pricing-booking-routes h3 {
+    color: var(--primary-dark-green);
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+.pricing-booking-routes p {
+    color: #4a544f;
+    margin: 0;
+}
+
+@media (max-width: 980px) {
+    .pricing-offers-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .pricing-offer-heading {
+        min-height: 0;
+    }
+}
+
+@media (max-width: 760px) {
+    .pricing-overview-media img {
+        height: clamp(280px, 72vw, 390px);
+    }
+
+    .pricing-overview-copy {
+        bottom: auto;
+        left: auto;
+        max-width: none;
+        position: relative;
+    }
+
+    .pricing-guide-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .pricing-booking-routes li {
+        grid-template-columns: 2.25rem minmax(0, 1fr);
+    }
+
+    .pricing-booking-routes p {
+        grid-column: 2;
+    }
+}
+
+@media (max-width: 480px) {
+    .pricing-guide-actions .btn {
+        width: 100%;
+    }
+}
+
 /* Regular dance story */
 .dance-story-section {
     background: linear-gradient(180deg, var(--white) 0%, var(--paper) 100%);
