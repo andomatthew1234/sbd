@@ -89,13 +89,13 @@ function renderEvent(event, ticketing) {
     const isLidcombe = event.location?.trim().toLowerCase().includes("lidcombe");
     const ticketActions = document.createElement("div");
     ticketActions.className = "ticket-actions";
-    addActionLink(ticketActions, "Family tickets", ticketing.familyUrl, "ticket");
-    addActionLink(ticketActions, "Standard tickets", ticketing.standardUrl, "ticket");
     if (isLidcombe) {
         lidcombeWhatsAppGroups.forEach(group => {
             addActionLink(ticketActions, group.label, group.url, "whatsapp");
         });
     }
+    addActionLink(ticketActions, "Family tickets", ticketing.familyUrl, "ticket");
+    addActionLink(ticketActions, "Standard tickets", ticketing.standardUrl, "ticket");
     if (!ticketActions.children.length) {
         const pending = document.createElement("p");
         pending.className = "ticket-link-pending";
