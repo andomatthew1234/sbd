@@ -7,6 +7,16 @@ const defaultTicketing = {
     standardUrl: "https://square.link/u/q9M27Sd5",
     familyUrl: "https://square.link/u/biMNCMCt"
 };
+const lidcombeWhatsAppGroups = [
+    {
+        label: "Lidcombe bush dance info",
+        url: "https://chat.whatsapp.com/K1TOwc6OHtPArjnFBLNxpD?mode=gi_t"
+    },
+    {
+        label: "Lidcombe Bush dance (regular joiners group)",
+        url: "https://chat.whatsapp.com/IVJM6F5nq0IGKKl01FnIWj?mode=gi_t"
+    }
+];
 
 if (eventsList) {
     const app = initializeApp(firebaseConfig);
@@ -76,10 +86,16 @@ function renderEvent(event, ticketing) {
     addDetail(details, "Accessibility", event.accessibility);
     addDetail(details, "Transport & parking", event.transport);
     addDetail(details, "Refunds", event.refundPolicy);
+    const isLidcombe = event.location?.trim().toLowerCase().includes("lidcombe");
     const ticketActions = document.createElement("div");
     ticketActions.className = "ticket-actions";
-    addTicketLink(ticketActions, "Standard tickets", ticketing.standardUrl);
-    addTicketLink(ticketActions, "Family tickets", ticketing.familyUrl);
+    addActionLink(ticketActions, "Family tickets", ticketing.familyUrl, "ticket");
+    addActionLink(ticketActions, "Standard tickets", ticketing.standardUrl, "ticket");
+    if (isLidcombe) {
+        lidcombeWhatsAppGroups.forEach(group => {
+            addActionLink(ticketActions, group.label, group.url, "whatsapp");
+        });
+    }
     if (!ticketActions.children.length) {
         const pending = document.createElement("p");
         pending.className = "ticket-link-pending";
@@ -89,20 +105,60 @@ function renderEvent(event, ticketing) {
 
     body.append(venue, tickets);
     if (details.children.length) body.append(details);
+    if (isLidcombe) {
+        const communityJoin = document.createElement("div");
+        communityJoin.className = "community-join";
+        const communityJoinTitle = document.createElement("h3");
+        communityJoinTitle.textContent = "Join the Lidcombe WhatsApp groups";
+        const communityJoinCopy = document.createElement("p");
+        communityJoinCopy.textContent = "Get dance information and stay connected with other regular joiners.";
+        communityJoin.append(communityJoinTitle, communityJoinCopy);
+        body.append(communityJoin);
+    }
     body.append(ticketActions);
     card.append(header, body);
     eventsList.append(card);
 }
 
-function addTicketLink(container, label, url) {
+function addActionLink(container, label, url, type) {
     if (!url) return;
     const link = document.createElement("a");
-    link.className = "btn btn-primary cta-btn";
+    link.className = `event-action event-action-${type}`;
     link.href = url;
     link.target = "_blank";
-    link.rel = "noopener";
-    link.textContent = label;
+    link.rel = "noopener noreferrer";
+    link.append(createActionIcon(type));
+    const text = document.createElement("span");
+    text.textContent = label;
+    link.append(text);
     container.append(link);
+}
+
+function createActionIcon(type) {
+    const namespace = "http://www.w3.org/2000/svg";
+    const svg = document.createElementNS(namespace, "svg");
+    svg.classList.add("event-action-icon");
+    svg.setAttribute("viewBox", "0 0 24 24");
+    svg.setAttribute("aria-hidden", "true");
+    svg.setAttribute("focusable", "false");
+
+    const paths = type === "whatsapp"
+        ? [
+            "M20.5 11.7a8.5 8.5 0 0 1-12.6 7.4L3 20.5l1.4-4.7A8.5 8.5 0 1 1 20.5 11.7Z",
+            "M8.1 7.6c.2-.4.4-.4.7-.4h.5c.2 0 .4.1.5.4l.7 1.7c.1.3.1.5-.1.7l-.5.7c-.2.2-.1.4 0 .6.7 1.2 1.7 2.1 3 2.7.2.1.4.1.6-.1l.8-1c.2-.2.4-.3.7-.2l1.7.8c.3.1.5.2.5.4 0 .2-.1 1.2-.7 1.8-.6.6-1.4.8-2.3.6-1-.2-2.4-.8-4.1-2.3-1.4-1.2-2.4-2.7-2.7-3.7-.3-1-.1-2 .3-2.7Z"
+        ]
+        : [
+            "M4 6.5h16v3a2.5 2.5 0 0 0 0 5v3H4v-3a2.5 2.5 0 0 0 0-5v-3Z",
+            "M12 7.5v1.5M12 11.2v1.6M12 15v1.5"
+        ];
+
+    paths.forEach(pathData => {
+        const path = document.createElementNS(namespace, "path");
+        path.setAttribute("d", pathData);
+        svg.append(path);
+    });
+
+    return svg;
 }
 
 function addDetail(container, label, value) {
