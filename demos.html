@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Demos | Sydney Bush Dances</title>
-    <meta name="description" content="Watch Sydney Bush Dances demos and explore photos and videos from our dances, workshops, and live music.">
+    <title>Gallery &amp; Demos | Sydney Bush Dances</title>
+    <meta name="description" content="Explore the Sydney Bush Dances gallery: photographs and films from our dance floors, live bands, callers, venues, and community events.">
     <link rel="canonical" href="https://sydneybushdances.com/demos.html">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Demos | Sydney Bush Dances">
-    <meta property="og:description" content="Explore dance, caller, and live music demos from Sydney Bush Dances.">
+    <meta property="og:title" content="Gallery &amp; Demos | Sydney Bush Dances">
+    <meta property="og:description" content="Photos and films from the dance floor, captured at Sydney Bush Dances events.">
     <meta property="og:url" content="https://sydneybushdances.com/demos.html">
     <meta property="og:image" content="https://sydneybushdances.com/assets/media/optimized/og-demos.jpg">
     <meta name="twitter:card" content="summary_large_image">
@@ -18,67 +18,183 @@
 <body class="page-demos">
     <a class="skip-link" href="#main-content">Skip to content</a>
     <div id="header-placeholder"></div>
+
     <main id="main-content">
-        <div class="page-header">
-            <h1>Demos</h1>
-            <p class="tagline">See the music, movement, and community behind a Sydney Bush Dance.</p>
-        </div>
-
-        <section class="content-section">
-            <div class="container demos-intro">
-                <p class="demo-kicker">Watch and explore</p>
-                <h2>A taste of the dance floor</h2>
-                <p>Step into the room before you arrive. These short clips show the movement, musicians, and shared energy that make each dance feel alive.</p>
+        <header class="gallery-hero">
+            <div class="container gallery-hero__inner">
+                <div class="gallery-hero__copy">
+                    <p class="gallery-eyebrow">Sydney Bush Dances on camera</p>
+                    <h1>Movement, music,<br>and a room in full swing.</h1>
+                    <p>Real moments from our dance floors, bands, venues, and community. Open any frame to see the full photograph or play the film.</p>
+                </div>
+                <div class="gallery-hero__index">
+                    <span><strong>13</strong> photographs</span>
+                    <span><strong>7</strong> films</span>
+                    <span><strong>100%</strong> our media</span>
+                </div>
             </div>
-        </section>
+        </header>
 
-        <section class="content-section light-bg">
-            <div class="container">
-                <div class="demos-section-heading">
+        <section class="gallery-section" aria-labelledby="gallery-heading">
+            <div class="container gallery-shell">
+                <div class="gallery-toolbar">
                     <div>
-                        <p class="demo-kicker">Video demos</p>
-                        <h2>Learn the feel before you arrive</h2>
+                        <p class="gallery-eyebrow">The collection</p>
+                        <h2 id="gallery-heading">Inside the dance</h2>
                     </div>
-                    <p>Three different views of a night with Sydney Bush Dances.</p>
+                    <div class="gallery-filter" role="group" aria-label="Filter gallery media">
+                        <button class="gallery-filter__button is-active" type="button" data-filter="all" aria-pressed="true">All <span>20</span></button>
+                        <button class="gallery-filter__button" type="button" data-filter="photo" aria-pressed="false">Photos <span>13</span></button>
+                        <button class="gallery-filter__button" type="button" data-filter="video" aria-pressed="false">Films <span>7</span></button>
+                    </div>
                 </div>
-                <div class="demos-video-grid">
-                    <figure class="video-demo-card video-demo-featured">
-                        <video controls playsinline preload="none" poster="assets/media/optimized/demo-group-poster-1248.webp">
-                            <source src="assets/media/optimized/demo-group-dance.mp4" type="video/mp4">
-                            Your browser does not support embedded video.
-                        </video>
-                        <figcaption><span>On the floor</span><strong>The whole group moves together</strong></figcaption>
-                    </figure>
-                    <figure class="video-demo-card">
-                        <video controls playsinline preload="none" poster="assets/media/optimized/demo-social-poster-1280.webp">
-                            <source src="assets/media/optimized/demo-social-dance.mp4" type="video/mp4">
-                            Your browser does not support embedded video.
-                        </video>
-                        <figcaption><span>Social dancing</span><strong>Partners, patterns, and plenty of momentum</strong></figcaption>
-                    </figure>
-                    <figure class="video-demo-card">
-                        <video controls playsinline preload="none" poster="assets/media/optimized/demo-music-poster-1280.webp">
-                            <source src="assets/media/optimized/demo-live-music.mp4" type="video/mp4">
-                            Your browser does not support embedded video.
-                        </video>
-                        <figcaption><span>Live music</span><strong>The band drives every step</strong></figcaption>
-                    </figure>
+                <p class="gallery-result-count" aria-live="polite"><span id="gallery-visible-count">20</span> moments showing</p>
+
+                <div class="pro-gallery" id="event-gallery">
+                    <button class="gallery-item gallery-item--feature" type="button" data-type="photo" data-src="assets/gallery/IMG_3348.jpeg" data-title="The floor comes alive" data-caption="A full dance floor under the lights.">
+                        <img src="assets/gallery/IMG_3348.jpeg" width="640" height="480" alt="Dancers silhouetted under warm lights in a timber hall" fetchpriority="high" decoding="async">
+                        <span class="gallery-item__overlay"><span class="gallery-item__type">Photograph</span><strong>The floor comes alive</strong></span>
+                    </button>
+
+                    <button class="gallery-item gallery-item--portrait" type="button" data-type="photo" data-src="assets/gallery/hall.jpeg" data-title="Ready for the first set" data-caption="The hall, dressed and waiting for dancers.">
+                        <img src="assets/gallery/hall.jpeg" width="960" height="1089" alt="An empty community hall prepared with coloured lights" loading="lazy" decoding="async">
+                        <span class="gallery-item__overlay"><span class="gallery-item__type">Venue</span><strong>Ready for the first set</strong></span>
+                    </button>
+
+                    <button class="gallery-item gallery-item--wide" type="button" data-type="video" data-src="assets/media/optimized/hero-desktop.mp4" data-poster="assets/media/optimized/hero-poster-1600.webp" data-title="A night in motion" data-caption="A quick look across the Sydney Bush Dances floor.">
+                        <img src="assets/media/optimized/hero-poster-1600.webp" width="1600" height="900" alt="Dancers moving across the floor during a bush dance" loading="lazy" decoding="async">
+                        <span class="gallery-item__play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.6v12.8L18 12 8 5.6Z"/></svg></span>
+                        <span class="gallery-item__overlay"><span class="gallery-item__type">Film · 12 sec</span><strong>A night in motion</strong></span>
+                    </button>
+
+                    <button class="gallery-item" type="button" data-type="photo" data-src="assets/media/optimized/education-music-1246.webp" data-title="Music at floor level" data-caption="Fiddle and guitar lead the room from the edge of the dance floor.">
+                        <img src="assets/media/optimized/education-music-1246.webp" srcset="assets/media/optimized/education-music-640.webp 640w, assets/media/optimized/education-music-1246.webp 1246w" sizes="(max-width: 900px) 50vw, 34vw" width="1246" height="686" alt="A fiddler and guitarist playing beside dancers" loading="lazy" decoding="async">
+                        <span class="gallery-item__overlay"><span class="gallery-item__type">Live music</span><strong>Music at floor level</strong></span>
+                    </button>
+
+                    <button class="gallery-item" type="button" data-type="photo" data-src="assets/media/optimized/dances-feature-1218.webp" data-title="Turn through together" data-caption="A figure taking shape in front of the live band.">
+                        <img src="assets/media/optimized/dances-feature-1218.webp" srcset="assets/media/optimized/dances-feature-640.webp 640w, assets/media/optimized/dances-feature-1218.webp 1218w" sizes="(max-width: 900px) 50vw, 34vw" width="1218" height="682" alt="Dancers turning together in front of a lit stage" loading="lazy" decoding="async">
+                        <span class="gallery-item__overlay"><span class="gallery-item__type">Dance floor</span><strong>Turn through together</strong></span>
+                    </button>
+
+                    <button class="gallery-item" type="button" data-type="video" data-src="assets/media/optimized/demo-group-dance.mp4" data-poster="assets/media/optimized/demo-group-poster-1248.webp" data-title="The whole group moves" data-caption="Follow the caller and let the set carry you.">
+                        <img src="assets/media/optimized/demo-group-poster-1248.webp" srcset="assets/media/optimized/demo-group-poster-640.webp 640w, assets/media/optimized/demo-group-poster-1248.webp 1248w" sizes="(max-width: 900px) 50vw, 34vw" width="1248" height="672" alt="A group moving together across the dance floor" loading="lazy" decoding="async">
+                        <span class="gallery-item__play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.6v12.8L18 12 8 5.6Z"/></svg></span>
+                        <span class="gallery-item__overlay"><span class="gallery-item__type">Film · 18 sec</span><strong>The whole group moves</strong></span>
+                    </button>
+
+                    <button class="gallery-item gallery-item--tall" type="button" data-type="photo" data-src="assets/media/optimized/home-story-1247.webp" data-title="Make an arch" data-caption="A familiar figure, learned together and enjoyed in the moment.">
+                        <img src="assets/media/optimized/home-story-1247.webp" srcset="assets/media/optimized/home-story-640.webp 640w, assets/media/optimized/home-story-1247.webp 1247w" sizes="(max-width: 900px) 50vw, 34vw" width="1247" height="702" alt="Two dancers forming an arch as others pass beneath" loading="lazy" decoding="async">
+                        <span class="gallery-item__overlay"><span class="gallery-item__type">Dance floor</span><strong>Make an arch</strong></span>
+                    </button>
+
+                    <button class="gallery-item" type="button" data-type="photo" data-src="assets/media/optimized/contact-community-1400.webp" data-title="The band starts the set" data-caption="Fiddle and guitar in the warm stage light.">
+                        <img src="assets/media/optimized/contact-community-1400.webp" srcset="assets/media/optimized/contact-community-720.webp 720w, assets/media/optimized/contact-community-1400.webp 1400w" sizes="(max-width: 900px) 50vw, 34vw" width="1400" height="772" alt="Fiddler and guitarist playing together on stage" loading="lazy" decoding="async">
+                        <span class="gallery-item__overlay"><span class="gallery-item__type">Live music</span><strong>The band starts the set</strong></span>
+                    </button>
+
+                    <button class="gallery-item gallery-item--wide" type="button" data-type="video" data-src="assets/media/optimized/demo-social-dance.mp4" data-poster="assets/media/optimized/demo-social-poster-1280.webp" data-title="Partners and patterns" data-caption="Social dancing with plenty of momentum.">
+                        <img src="assets/media/optimized/demo-social-poster-1280.webp" width="1280" height="720" alt="Partners dancing together across a community hall" loading="lazy" decoding="async">
+                        <span class="gallery-item__play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.6v12.8L18 12 8 5.6Z"/></svg></span>
+                        <span class="gallery-item__overlay"><span class="gallery-item__type">Film · 20 sec</span><strong>Partners and patterns</strong></span>
+                    </button>
+
+                    <button class="gallery-item" type="button" data-type="photo" data-src="assets/media/optimized/team-performance-1400.webp" data-title="From the musicians' side" data-caption="The band keeps an eye on the figures unfolding across the floor.">
+                        <img src="assets/media/optimized/team-performance-1400.webp" srcset="assets/media/optimized/team-performance-720.webp 720w, assets/media/optimized/team-performance-1400.webp 1400w" sizes="(max-width: 900px) 50vw, 34vw" width="1400" height="782" alt="Musicians playing while couples dance beyond them" loading="lazy" decoding="async">
+                        <span class="gallery-item__overlay"><span class="gallery-item__type">Live music</span><strong>From the musicians' side</strong></span>
+                    </button>
+
+                    <button class="gallery-item" type="button" data-type="photo" data-src="assets/media/optimized/pricing-live-1400.webp" data-title="The best part is shared" data-caption="A dance floor full of conversation, movement, and laughter.">
+                        <img src="assets/media/optimized/pricing-live-1400.webp" srcset="assets/media/optimized/pricing-live-720.webp 720w, assets/media/optimized/pricing-live-1400.webp 1400w" sizes="(max-width: 900px) 50vw, 34vw" width="1400" height="782" alt="Dancers laughing together between figures" loading="lazy" decoding="async">
+                        <span class="gallery-item__overlay"><span class="gallery-item__type">Community</span><strong>The best part is shared</strong></span>
+                    </button>
+
+                    <button class="gallery-item" type="button" data-type="video" data-src="assets/media/optimized/demo-live-music.mp4" data-poster="assets/media/optimized/demo-music-poster-1280.webp" data-title="Live music drives every step" data-caption="Fiddle and guitar give the dance its lift.">
+                        <img src="assets/media/optimized/demo-music-poster-1280.webp" width="1280" height="720" alt="Fiddler and guitarist playing for the dance" loading="lazy" decoding="async">
+                        <span class="gallery-item__play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.6v12.8L18 12 8 5.6Z"/></svg></span>
+                        <span class="gallery-item__overlay"><span class="gallery-item__type">Film · 20 sec</span><strong>Live music drives every step</strong></span>
+                    </button>
+
+                    <button class="gallery-item gallery-item--tall" type="button" data-type="photo" data-src="assets/media/optimized/mailing-atmosphere-1041.webp" data-title="One more dance" data-caption="A final set in the colour and atmosphere of the hall.">
+                        <img src="assets/media/optimized/mailing-atmosphere-1041.webp" srcset="assets/media/optimized/mailing-atmosphere-640.webp 640w, assets/media/optimized/mailing-atmosphere-1041.webp 1041w" sizes="(max-width: 900px) 50vw, 34vw" width="1041" height="576" alt="Couples dancing while the band plays on a colourful stage" loading="lazy" decoding="async">
+                        <span class="gallery-item__overlay"><span class="gallery-item__type">Atmosphere</span><strong>One more dance</strong></span>
+                    </button>
+
+                    <button class="gallery-item" type="button" data-type="photo" data-src="assets/gallery/IMG_2979.JPG" data-title="A full house" data-caption="The room gathered around the stage for a live performance.">
+                        <img src="assets/gallery/IMG_2979.JPG" width="640" height="360" alt="A large seated audience facing a brightly lit stage" loading="lazy" decoding="async">
+                        <span class="gallery-item__overlay"><span class="gallery-item__type">Event</span><strong>A full house</strong></span>
+                    </button>
+
+                    <button class="gallery-item" type="button" data-type="photo" data-src="assets/gallery/IMG_0601.jpeg" data-title="The room gathers" data-caption="Live music bringing a community hall together.">
+                        <img src="assets/gallery/IMG_0601.jpeg" width="640" height="360" alt="An audience watching musicians perform in a community hall" loading="lazy" decoding="async">
+                        <span class="gallery-item__overlay"><span class="gallery-item__type">Event</span><strong>The room gathers</strong></span>
+                    </button>
+
+                    <button class="gallery-item gallery-item--wide" type="button" data-type="video" data-src="assets/media/optimized/dances-in-motion.mp4" data-poster="assets/media/optimized/dances-motion-poster-1280.webp" data-title="Across the dance floor" data-caption="Ten seconds of movement, turns, and shared rhythm.">
+                        <img src="assets/media/optimized/dances-motion-poster-1280.webp" width="1280" height="720" alt="Bush dancers moving in lines across the floor" loading="lazy" decoding="async">
+                        <span class="gallery-item__play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.6v12.8L18 12 8 5.6Z"/></svg></span>
+                        <span class="gallery-item__overlay"><span class="gallery-item__type">Film · 10 sec</span><strong>Across the dance floor</strong></span>
+                    </button>
+
+                    <button class="gallery-item gallery-item--portrait" type="button" data-type="photo" data-src="assets/gallery/dc427d77-7470-4d6d-942b-bce3603bc66e.JPG" data-title="Under the festival lights" data-caption="A crowd and stage framed in purple light.">
+                        <img src="assets/gallery/dc427d77-7470-4d6d-942b-bce3603bc66e.JPG" width="1600" height="1200" alt="A festival crowd facing a stage lit in purple" loading="lazy" decoding="async">
+                        <span class="gallery-item__overlay"><span class="gallery-item__type">Event</span><strong>Under the festival lights</strong></span>
+                    </button>
+
+                    <button class="gallery-item gallery-item--portrait" type="button" data-type="photo" data-src="assets/media/optimized/caleb-960.webp" data-title="Meet the caller" data-caption="Caleb brings the figures, the timing, and the room together.">
+                        <img src="assets/media/optimized/caleb-960.webp" srcset="assets/media/optimized/caleb-480.webp 480w, assets/media/optimized/caleb-960.webp 960w" sizes="(max-width: 900px) 50vw, 34vw" width="960" height="1274" alt="Sydney Bush Dances caller Caleb smiling outdoors" loading="lazy" decoding="async">
+                        <span class="gallery-item__overlay"><span class="gallery-item__type">The caller</span><strong>Meet the caller</strong></span>
+                    </button>
+
+                    <button class="gallery-item gallery-item--wide" type="button" data-type="video" data-src="assets/media/optimized/demo-close-dance.mp4" data-poster="assets/media/optimized/demo-close-poster-1280.webp" data-title="Close to the action" data-caption="A partner sequence seen from the edge of the set.">
+                        <img src="assets/media/optimized/demo-close-poster-1280.webp" width="1280" height="720" alt="Partners moving through a bush dance figure" loading="lazy" decoding="async">
+                        <span class="gallery-item__play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.6v12.8L18 12 8 5.6Z"/></svg></span>
+                        <span class="gallery-item__overlay"><span class="gallery-item__type">Film · 24 sec</span><strong>Close to the action</strong></span>
+                    </button>
+
+                    <button class="gallery-item gallery-item--feature" type="button" data-type="video" data-src="assets/media/optimized/demo-community-dance.mp4" data-poster="assets/media/optimized/demo-community-poster-1280.webp" data-title="Stay for another set" data-caption="The longer view: a whole community dance unfolding in the room.">
+                        <img src="assets/media/optimized/demo-community-poster-1280.webp" width="1280" height="720" alt="A community group dancing together in a hall" loading="lazy" decoding="async">
+                        <span class="gallery-item__play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.6v12.8L18 12 8 5.6Z"/></svg></span>
+                        <span class="gallery-item__overlay"><span class="gallery-item__type">Film · 70 sec</span><strong>Stay for another set</strong></span>
+                    </button>
                 </div>
             </div>
         </section>
 
-        <section class="content-section demos-cta">
-            <div class="container text-center">
-                <p class="demo-kicker">Ready to join in?</p>
-                <h2>Experience it in the room</h2>
-                <a class="btn btn-primary" href="dances.html">Find the next dance</a>
+        <section class="gallery-cta" aria-labelledby="gallery-cta-heading">
+            <div class="container gallery-cta__inner">
+                <div>
+                    <p class="gallery-eyebrow">The next frame could be yours</p>
+                    <h2 id="gallery-cta-heading">See it from the dance floor.</h2>
+                </div>
+                <a class="btn btn-primary" href="dances.html">View monthly dances</a>
             </div>
         </section>
     </main>
 
-    <div id="footer-placeholder"></div>
+    <dialog class="gallery-lightbox" id="gallery-lightbox" aria-labelledby="gallery-lightbox-title">
+        <div class="gallery-lightbox__frame">
+            <button class="gallery-lightbox__close" type="button" aria-label="Close gallery viewer">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+            </button>
+            <div class="gallery-lightbox__media" id="gallery-lightbox-media"></div>
+            <div class="gallery-lightbox__footer">
+                <div>
+                    <p class="gallery-lightbox__count" id="gallery-lightbox-count"></p>
+                    <h2 id="gallery-lightbox-title">Gallery item</h2>
+                    <p id="gallery-lightbox-caption"></p>
+                </div>
+                <div class="gallery-lightbox__controls">
+                    <button class="gallery-lightbox__nav gallery-lightbox__prev" type="button" aria-label="Previous gallery item"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg></button>
+                    <button class="gallery-lightbox__nav gallery-lightbox__next" type="button" aria-label="Next gallery item"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button>
+                </div>
+            </div>
+        </div>
+    </dialog>
 
+    <div id="footer-placeholder"></div>
     <script src="main.js"></script>
+    <script src="gallery.js"></script>
     <script type="module" src="analytics.js"></script>
 </body>
 </html>
