@@ -1,12 +1,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-import { getDoc, getFirestore, collection, doc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 import { firebaseConfig } from "./firebase-config.js";
 
 const eventsList = document.getElementById("events-list");
-const defaultTicketing = {
-    standardUrl: "https://square.link/u/q9M27Sd5",
-    familyUrl: "https://square.link/u/biMNCMCt"
-};
 const lidcombeWhatsAppGroups = [
     {
         label: "Lidcombe bush dance info",
@@ -27,14 +23,10 @@ if (eventsList) {
 
 async function loadEvents(db) {
     try {
-        const [eventsSnapshot, ticketingSnapshot] = await Promise.all([
-            getDocs(query(
+        const eventsSnapshot = await getDocs(query(
             collection(db, "events"),
             where("status", "==", "published")
-            )),
-            getDoc(doc(db, "siteSettings", "ticketing"))
-        ]);
-        const ticketing = { ...defaultTicketing, ...(ticketingSnapshot.exists() ? ticketingSnapshot.data() : {}) };
+        ));
         const events = eventsSnapshot.docs
             .map(document => ({ id: document.id, ...document.data() }))
             .sort((first, second) => first.startsAt.localeCompare(second.startsAt));
@@ -46,15 +38,15 @@ async function loadEvents(db) {
             return;
         }
 
-        events.forEach(event => renderEvent(event, ticketing));
-        addEventStructuredData(events, ticketing);
+        events.forEach(renderEvent);
+        addEventStructuredData(events);
     } catch (error) {
         console.error("Unable to load events:", error);
         showMessage("Upcoming dance details are temporarily unavailable. Please try again soon.");
     }
 }
 
-function renderEvent(event, ticketing) {
+function renderEvent(event) {
     const card = document.createElement("article");
     card.className = "gig-card";
 
@@ -77,7 +69,7 @@ function renderEvent(event, ticketing) {
     const tickets = document.createElement("p");
     const ticketsLabel = document.createElement("strong");
     ticketsLabel.textContent = "Tickets:";
-    tickets.append(ticketsLabel, " Choose Standard or Family tickets below.");
+    tickets.append(ticketsLabel, ` ${event.ticketSummary || "Online ticket links coming soon."}`);
     const details = document.createElement("dl");
     details.className = "event-details";
     addDetail(details, "Time", formatTime(event.startsAt, event.endsAt));
@@ -87,6 +79,9 @@ function renderEvent(event, ticketing) {
     addDetail(details, "Transport & parking", event.transport);
     addDetail(details, "Refunds", event.refundPolicy);
     const isLidcombe = event.location?.trim().toLowerCase().includes("lidcombe");
+    const familyTicketUrl = getSquarePaymentUrl(event.familyTicketUrl);
+    const standardTicketUrl = getSquarePaymentUrl(event.standardTicketUrl);
+    const hasTicketLinks = Boolean(familyTicketUrl || standardTicketUrl);
     const ticketActions = document.createElement("div");
     ticketActions.className = "ticket-actions";
     if (isLidcombe) {
@@ -94,9 +89,9 @@ function renderEvent(event, ticketing) {
             addActionLink(ticketActions, group.label, group.url, "whatsapp");
         });
     }
-    addActionLink(ticketActions, "Family tickets", ticketing.familyUrl, "ticket");
-    addActionLink(ticketActions, "Standard tickets", ticketing.standardUrl, "ticket");
-    if (!ticketActions.children.length) {
+    addActionLink(ticketActions, "Family tickets", familyTicketUrl, "ticket");
+    addActionLink(ticketActions, "Standard tickets", standardTicketUrl, "ticket");
+    if (!hasTicketLinks) {
         const pending = document.createElement("p");
         pending.className = "ticket-link-pending";
         pending.textContent = "Online ticket links coming soon.";
@@ -118,6 +113,21 @@ function renderEvent(event, ticketing) {
     body.append(ticketActions);
     card.append(header, body);
     eventsList.append(card);
+}
+
+function getSquarePaymentUrl(url) {
+    if (!url) return "";
+    try {
+        const parsedUrl = new URL(url);
+        const hostname = parsedUrl.hostname.toLowerCase();
+        const isSquareHost = hostname === "square.link"
+            || hostname.endsWith(".square.link")
+            || hostname === "squareup.com"
+            || hostname.endsWith(".squareup.com");
+        return parsedUrl.protocol === "https:" && isSquareHost ? parsedUrl.href : "";
+    } catch {
+        return "";
+    }
 }
 
 function addActionLink(container, label, url, type) {
@@ -193,7 +203,7 @@ function formatAvailability(availability) {
     }[availability] || "";
 }
 
-function addEventStructuredData(events, ticketing) {
+function addEventStructuredData(events) {
     const script = document.createElement("script");
     script.type = "application/ld+json";
     script.textContent = JSON.stringify(events.map(event => ({
@@ -209,11 +219,7 @@ function addEventStructuredData(events, ticketing) {
             name: event.venueName,
             address: event.address
         },
-        offers: {
-            "@type": "Offer",
-            url: ticketing.standardUrl,
-            availability: event.availability === "sold-out" ? "https://schema.org/SoldOut" : "https://schema.org/InStock"
-        },
+        offers: createStructuredOffers(event),
         organizer: {
             "@type": "Organization",
             name: "Sydney Bush Dances",
@@ -221,6 +227,17 @@ function addEventStructuredData(events, ticketing) {
         }
     })));
     document.head.append(script);
+}
+
+function createStructuredOffers(event) {
+    const availability = event.availability === "sold-out" ? "https://schema.org/SoldOut" : "https://schema.org/InStock";
+    const offers = [
+        { name: "Standard ticket", url: getSquarePaymentUrl(event.standardTicketUrl) },
+        { name: "Family ticket", url: getSquarePaymentUrl(event.familyTicketUrl) }
+    ]
+        .filter(offer => offer.url)
+        .map(offer => ({ "@type": "Offer", name: offer.name, url: offer.url, availability }));
+    return offers.length ? offers : undefined;
 }
 
 function showMessage(message) {

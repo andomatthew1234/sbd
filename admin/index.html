@@ -99,26 +99,6 @@
                         </section>
                     </div>
                     <div id="events-panel" aria-labelledby="events-tab">
-                        <section class="panel ticketing-settings">
-                            <div class="panel-title">
-                                <div>
-                                    <p class="eyebrow">Universal ticketing</p>
-                                    <h2>Ticket links</h2>
-                                </div>
-                            </div>
-                            <p>These links appear on every published event. Choose the ticket type when booking.</p>
-                            <form id="ticketing-form">
-                                <label for="standard-ticket-url">Standard ticket link</label>
-                                <input id="standard-ticket-url" type="url" placeholder="https://square.link/u/..." required>
-                                <label for="family-ticket-url">Family ticket link</label>
-                                <input id="family-ticket-url" type="url" placeholder="https://square.link/u/..." required>
-                                <p id="ticketing-error" class="form-message error" role="alert" hidden></p>
-                                <p id="ticketing-success" class="form-message success" role="status" hidden></p>
-                                <div class="form-actions">
-                                    <button class="button" type="submit">Save ticket links</button>
-                                </div>
-                            </form>
-                        </section>
                         <div class="manager-layout">
                             <section class="panel">
                     <div class="panel-title">
@@ -159,6 +139,21 @@
                         <input id="address" type="text" required>
                         <label for="ticket-summary">Ticket summary</label>
                         <input id="ticket-summary" type="text" placeholder="$20 online / $25 at the door / $80 per family" required>
+                        <fieldset class="ticket-link-fields">
+                            <legend>Square links for this event</legend>
+                            <p>Create separate Square payment links for this dance, then paste them below. These links are never shared with another event.</p>
+                            <a class="square-help-link" href="https://squareup.com/help/au/en/article/6692-get-started-with-square-checkout-links" target="_blank" rel="noopener noreferrer">How to create Square payment links</a>
+                            <div class="form-grid">
+                                <div>
+                                    <label for="standard-ticket-url">Standard ticket link</label>
+                                    <input id="standard-ticket-url" type="url" inputmode="url" placeholder="https://square.link/u/...">
+                                </div>
+                                <div>
+                                    <label for="family-ticket-url">Family ticket link</label>
+                                    <input id="family-ticket-url" type="url" inputmode="url" placeholder="https://square.link/u/...">
+                                </div>
+                            </div>
+                        </fieldset>
                         <label for="availability">Availability</label>
                         <select id="availability" required>
                             <option value="available">Tickets available</option>

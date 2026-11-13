@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
-import { addDoc, collection, deleteDoc, doc, getDoc, getFirestore, onSnapshot, orderBy, query, serverTimestamp, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+import { addDoc, collection, deleteDoc, doc, getFirestore, onSnapshot, orderBy, query, serverTimestamp, updateDoc } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyCMRd-sHY6cdYdhxTiSydFYnNtNiwpntXo",
@@ -18,7 +18,6 @@ const loginPanel = document.getElementById("login-panel");
 const managerPanel = document.getElementById("manager-panel");
 const loginForm = document.getElementById("login-form");
 const eventForm = document.getElementById("event-form");
-const ticketingForm = document.getElementById("ticketing-form");
 const eventList = document.getElementById("event-list");
 const signOutButton = document.getElementById("sign-out");
 const deleteButton = document.getElementById("delete-event");
@@ -52,7 +51,6 @@ onAuthStateChanged(auth, user => {
     if (stopAnalyticsListener) stopAnalyticsListener();
     if (isManager) {
         startEventsListener();
-        loadTicketingSettings();
         startSubmissionListener();
         startAnalyticsListeners();
     }
@@ -98,22 +96,6 @@ eventForm.addEventListener("submit", async event => {
     }
 });
 
-ticketingForm.addEventListener("submit", async event => {
-    event.preventDefault();
-    const standardUrl = document.getElementById("standard-ticket-url").value.trim();
-    const familyUrl = document.getElementById("family-ticket-url").value.trim();
-    const error = validateTicketingUrls(standardUrl, familyUrl);
-    if (error) return showTicketingMessage(error, "error");
-
-    try {
-        await setDoc(doc(db, "siteSettings", "ticketing"), { standardUrl, familyUrl, updatedAt: serverTimestamp() }, { merge: true });
-        showTicketingMessage("Ticket links saved.", "success");
-    } catch (error) {
-        console.error("Unable to save ticket links:", error);
-        showTicketingMessage("The ticket links could not be saved. Please try again.", "error");
-    }
-});
-
 deleteButton.addEventListener("click", async () => {
     const id = document.getElementById("event-id").value;
     if (!id || !window.confirm("Delete this event? This cannot be undone.")) return;
@@ -134,18 +116,6 @@ function startEventsListener() {
         console.error("Unable to load events:", error);
         eventList.textContent = "Events could not be loaded.";
     });
-}
-
-async function loadTicketingSettings() {
-    try {
-        const snapshot = await getDoc(doc(db, "siteSettings", "ticketing"));
-        const settings = snapshot.exists() ? snapshot.data() : {};
-        document.getElementById("standard-ticket-url").value = settings.standardUrl || "";
-        document.getElementById("family-ticket-url").value = settings.familyUrl || "";
-    } catch (error) {
-        console.error("Unable to load ticket links:", error);
-        showTicketingMessage("Ticket links could not be loaded. Please try again.", "error");
-    }
 }
 
 function startSubmissionListener() {
@@ -183,7 +153,11 @@ function renderEvents() {
         const status = document.createElement("span");
         status.className = "status";
         status.textContent = event.status;
-        button.append(location, date, status);
+        const ticketLinkStatus = document.createElement("span");
+        const hasTicketLinks = Boolean(event.standardTicketUrl || event.familyTicketUrl);
+        ticketLinkStatus.className = `ticket-link-status ${hasTicketLinks ? "is-ready" : "is-missing"}`;
+        ticketLinkStatus.textContent = hasTicketLinks ? "Event Square links added" : "Event Square links missing";
+        button.append(location, date, status, ticketLinkStatus);
         button.addEventListener("click", () => editEvent(event));
         eventList.append(button);
     });
@@ -202,10 +176,12 @@ async function restoreDeletedEvents() {
             dateLabel: "4 November 2026",
             startsAt: "2026-11-04T18:00",
             endsAt: "22:00",
-            status: "published",
+            status: "draft",
             venueName: "Lidcombe Parish Hall",
             address: "57 Church St, Lidcombe NSW 2141",
             ticketSummary: "Ticket details coming soon",
+            standardTicketUrl: "",
+            familyTicketUrl: "",
             availability: "available",
             familyTicket: "",
             accessibility: "",
@@ -217,10 +193,12 @@ async function restoreDeletedEvents() {
             dateLabel: "28 November 2026",
             startsAt: "2026-11-28T18:00",
             endsAt: "22:00",
-            status: "published",
+            status: "draft",
             venueName: "Robertson",
             address: "55 Hoddle St, Robertson NSW 2577",
             ticketSummary: "Ticket details coming soon",
+            standardTicketUrl: "",
+            familyTicketUrl: "",
             availability: "available",
             familyTicket: "",
             accessibility: "",
@@ -235,7 +213,7 @@ async function restoreDeletedEvents() {
             createdAt: serverTimestamp(),
             updatedAt: serverTimestamp()
         })));
-        showEventMessage("The two deleted events have been restored. Add the verified Square links before selling tickets.", "success");
+        showEventMessage("The two events were restored as drafts. Add their Square links, then publish them.", "success");
     } catch (error) {
         console.error("Unable to restore events:", error);
         showEventMessage("The events could not be restored. Please try again.", "error");
@@ -432,6 +410,8 @@ function editEvent(event) {
     document.getElementById("venue-name").value = event.venueName || "";
     document.getElementById("address").value = event.address || "";
     document.getElementById("ticket-summary").value = event.ticketSummary || "";
+    document.getElementById("standard-ticket-url").value = event.standardTicketUrl || "";
+    document.getElementById("family-ticket-url").value = event.familyTicketUrl || "";
     document.getElementById("availability").value = event.availability || "available";
     document.getElementById("family-ticket").value = event.familyTicket || "";
     document.getElementById("accessibility").value = event.accessibility || "";
@@ -460,6 +440,8 @@ function getFormData() {
         venueName: document.getElementById("venue-name").value.trim(),
         address: document.getElementById("address").value.trim(),
         ticketSummary: document.getElementById("ticket-summary").value.trim(),
+        standardTicketUrl: document.getElementById("standard-ticket-url").value.trim(),
+        familyTicketUrl: document.getElementById("family-ticket-url").value.trim(),
         availability: document.getElementById("availability").value,
         familyTicket: document.getElementById("family-ticket").value.trim(),
         accessibility: document.getElementById("accessibility").value.trim(),
@@ -472,19 +454,26 @@ function validateEvent(event) {
     if (!event.location || !event.dateLabel || !event.startsAt || !event.endsAt || !event.venueName || !event.address || !event.ticketSummary) {
         return "Complete all required event details before saving.";
     }
+    for (const url of [event.standardTicketUrl, event.familyTicketUrl]) {
+        if (url && !isSquarePaymentUrl(url)) {
+            return "Use HTTPS Square links from square.link or squareup.com.";
+        }
+    }
+    if (event.status === "published" && event.availability !== "sold-out" && !event.standardTicketUrl && !event.familyTicketUrl) {
+        return "Add at least one event-specific Square link before publishing, or save the event as a draft.";
+    }
     return "";
 }
 
-function validateTicketingUrls(standardUrl, familyUrl) {
-    for (const url of [standardUrl, familyUrl]) {
-        try {
-            const parsedUrl = new URL(url);
-            if (parsedUrl.protocol !== "https:" || parsedUrl.hostname.includes("placeholder")) throw new Error();
-        } catch {
-            return "Enter valid HTTPS links for both Standard and Family tickets.";
-        }
+function isSquarePaymentUrl(url) {
+    try {
+        const parsedUrl = new URL(url);
+        const hostname = parsedUrl.hostname.toLowerCase();
+        return parsedUrl.protocol === "https:"
+            && (hostname === "square.link" || hostname.endsWith(".square.link") || hostname === "squareup.com" || hostname.endsWith(".squareup.com"));
+    } catch {
+        return false;
     }
-    return "";
 }
 
 function showLoginError(message) {
@@ -496,17 +485,6 @@ function showLoginError(message) {
 function showEventMessage(message, type) {
     const error = document.getElementById("event-error");
     const success = document.getElementById("event-success");
-    error.hidden = true;
-    success.hidden = true;
-    if (!message) return;
-    const element = type === "error" ? error : success;
-    element.textContent = message;
-    element.hidden = false;
-}
-
-function showTicketingMessage(message, type) {
-    const error = document.getElementById("ticketing-error");
-    const success = document.getElementById("ticketing-success");
     error.hidden = true;
     success.hidden = true;
     if (!message) return;

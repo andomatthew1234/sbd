@@ -3,10 +3,11 @@
 ## Booking URLs
 
 - [ ] Replace all placeholder event checkout URLs with verified Square buy links when they are available.
-- [x] Store each event's checkout URL alongside its date, location, ticket details, and attendee information in one event data source.
+- [x] Store each event's Standard and Family Square URLs alongside its date, location, ticket details, and attendee information.
 - [x] Send visitors directly from each event card to its Square checkout link.
 - [x] Show a clear event and ticket summary before sending visitors to Square.
-- [ ] Validate that published checkout URLs are HTTPS Square links and do not contain placeholder values.
+- [x] Validate that published checkout URLs are HTTPS Square links and do not contain placeholder values.
+- [x] Remove universal ticket URLs and require every published event to use its own Square link.
 
 ## Mobile And Accessibility
 
