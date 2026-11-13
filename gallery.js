@@ -5,8 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const visibleCount = document.querySelector("#gallery-visible-count");
     const lightbox = document.querySelector("#gallery-lightbox");
     const mediaFrame = document.querySelector("#gallery-lightbox-media");
-    const title = document.querySelector("#gallery-lightbox-title");
-    const caption = document.querySelector("#gallery-lightbox-caption");
     const count = document.querySelector("#gallery-lightbox-count");
     const closeButton = lightbox?.querySelector(".gallery-lightbox__close");
     const previousButton = lightbox?.querySelector(".gallery-lightbox__prev");
@@ -54,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
             video.preload = "metadata";
             video.src = item.dataset.src;
             if (item.dataset.poster) video.poster = item.dataset.poster;
-            video.setAttribute("aria-label", item.dataset.title || "Gallery film");
+            video.setAttribute("aria-label", `Gallery film ${currentIndex + 1}`);
             mediaFrame.append(video);
             video.play().catch(() => {});
         } else {
@@ -65,8 +63,6 @@ document.addEventListener("DOMContentLoaded", () => {
             mediaFrame.append(image);
         }
 
-        title.textContent = item.dataset.title || "Gallery item";
-        caption.textContent = item.dataset.caption || "";
         count.textContent = `${currentIndex + 1} / ${items.length} · ${isVideo ? "Film" : "Photograph"}`;
     };
 
